@@ -27,4 +27,4 @@ npx serve .
 
 ## Deploying
 
-https://github.com/DhiaAllagui/dhia.git
+https://dhiaallagui.github.io/dhia/
