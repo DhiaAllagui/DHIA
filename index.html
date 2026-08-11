@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dhia — Creative Developer &amp; Digital Designer</title>
 <meta name="description" content="Dhia — Creative Developer & Digital Designer. Graphic design, video editing, web development and mobile experiences.">
+<link rel="icon" type="image/png" href="assets/logo/dhia.png">
 
 <!-- =========================
      FONTS
@@ -685,6 +686,108 @@ button:focus-visible,
   border-radius: 100px;
 }
 
+/* =========================================================
+   PROJECT MODAL
+========================================================= */
+.modal-overlay{
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: rgba(8,8,8,0.82);
+  backdrop-filter: blur(6px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding: 24px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur) var(--ease);
+}
+.modal-overlay.active{ opacity: 1; pointer-events: auto; }
+.modal-panel{
+  position: relative;
+  width: 100%;
+  max-width: 780px;
+  max-height: 88vh;
+  overflow-y: auto;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: 14px;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+  padding: 48px;
+  transform: translateY(24px) scale(0.98);
+  transition: transform var(--dur) var(--ease);
+}
+.modal-overlay.active .modal-panel{ transform: translateY(0) scale(1); }
+.modal-close{
+  position: absolute;
+  top: 20px; right: 20px;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+  background: var(--surface-2);
+  color: var(--text);
+  display:flex; align-items:center; justify-content:center;
+  cursor: pointer;
+  transition: background var(--dur) var(--ease), border-color var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+.modal-close:hover{ border-color: var(--accent); color: var(--accent); transform: rotate(90deg); }
+
+.modal-cat{
+  font-size: 11.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 700;
+}
+.modal-title{
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 3.4vw, 2.4rem);
+  font-weight: 500;
+  margin-top: 10px;
+}
+.modal-desc{
+  margin-top: 18px;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.7;
+  max-width: 620px;
+}
+.modal-section-label{
+  font-size: 11.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text);
+  font-weight: 700;
+  margin-top: 30px;
+  margin-bottom: 12px;
+}
+.modal-contribution{ margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:8px; }
+.modal-contribution li{ color: var(--muted); font-size: 0.95rem; line-height:1.6; padding-left: 20px; position:relative; }
+.modal-contribution li::before{ content:'—'; position:absolute; left:0; color: var(--accent); }
+.modal-tags{ display:flex; flex-wrap:wrap; gap:8px; margin-top: 12px; }
+
+.modal-gallery{ display:flex; gap:12px; overflow-x:auto; padding-bottom: 6px; margin-top: 12px; }
+.modal-gallery img{ height: 220px; border-radius: 8px; border: 1px solid var(--line); flex-shrink:0; }
+
+.modal-video{ margin-top: 12px; }
+.modal-video video{ width:100%; border-radius: 8px; border: 1px solid var(--line); background:#000; }
+
+.modal-thumb{ width:100%; border-radius: 8px; border: 1px solid var(--line); margin-top: 12px; }
+
+.modal-actions{ display:flex; gap:14px; flex-wrap:wrap; margin-top: 34px; }
+
+.modal-note{
+  margin-top: 30px;
+  font-size: 0.85rem;
+  color: var(--muted-dim);
+  font-style: italic;
+}
+
+@media (max-width: 768px){
+  .modal-panel{ padding: 32px 24px; }
+}
+
 /* Project 1 - dashboard mockup */
 .mock-dashboard{ width: 84%; height: 74%; background: var(--surface-2); border:1px solid var(--line-strong); border-radius:8px; padding:14px; display:flex; flex-direction:column; gap:10px; }
 .mock-dashboard .bar{ display:flex; gap:6px; }
@@ -734,6 +837,10 @@ button:focus-visible,
 .mock-ui .sidebar i.on{ background: var(--accent); }
 .mock-ui .main{ flex:1; padding:14px; display:flex; flex-direction:column; gap:10px; }
 .mock-ui .card{ background: rgba(245,245,245,0.04); border:1px solid var(--line); border-radius:6px; height:38px; }
+
+/* Document mockup (PDF-only projects) */
+.mock-document{ display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; }
+.mock-document .doc-label{ font-size: 11.5px; letter-spacing:0.1em; text-transform:uppercase; color: var(--muted); font-weight:600; }
 
 /* =========================================================
    FEATURED PROJECT
@@ -835,6 +942,8 @@ button:focus-visible,
   cursor:default;
 }
 .tool-tag:hover{ color: var(--accent); transform: translateY(-3px); }
+.tool-tag-icon{ display:inline-flex; align-items:center; gap:10px; }
+.tool-tag-icon img{ width: 0.72em; height: 0.72em; display:inline-block; }
 
 /* =========================================================
    ABOUT ME
@@ -941,7 +1050,7 @@ button:focus-visible,
   font-family: var(--font-display);
   font-size: clamp(1.05rem, 2vw, 1.3rem);
   display:inline-flex;
-  align-items:center;
+  align-items:flex-start;
   gap:8px;
   position:relative;
   padding-bottom: 4px;
@@ -949,6 +1058,7 @@ button:focus-visible,
   transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease);
 }
 .contact-link-value:hover{ color: var(--accent); border-color: var(--accent); }
+.contact-link-icon{ width: 20px; height: 20px; flex-shrink:0; }
 .placeholder-note{
   font-size: 11px;
   color: var(--muted-dim);
@@ -1061,6 +1171,18 @@ html, body{ max-width: 100%; overflow-x: hidden; }
   <a href="#services" class="mobile-link">Services</a>
   <a href="#contact" class="mobile-link">Contact</a>
   <a href="#contact" class="nav-cta mobile-link">Let's Talk ↗</a>
+</div>
+
+<!-- =========================
+     PROJECT MODAL
+========================= -->
+<div class="modal-overlay" id="projectModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-panel">
+    <button class="modal-close" id="modalClose" aria-label="Close project details">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6L18 18M18 6L6 18"/></svg>
+    </button>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
 </div>
 
 <main id="top">
@@ -1196,149 +1318,7 @@ html, body{ max-width: 100%; overflow-x: hidden; }
       <button class="filter-btn" data-filter="mobile" role="tab" aria-selected="false">Mobile</button>
     </div>
 
-    <div class="project-grid" id="projectGrid">
-
-      <!-- Project 01 — ATHLEO -->
-      <article class="project-card pc-1 reveal" data-cat="web">
-        <div class="project-visual">
-          <div class="mock-dashboard" aria-hidden="true">
-            <div class="bar"><span class="dotc"></span><span class="dotc"></span><span class="dotc"></span></div>
-            <div class="row">
-              <div class="col">
-                <div class="bar-chart"><i style="height:40%"></i><i style="height:70%"></i><i style="height:50%"></i><i style="height:90%"></i><i style="height:60%"></i></div>
-              </div>
-              <div class="col">
-                <div class="stat-line" style="width:80%"></div>
-                <div class="stat-line" style="width:55%"></div>
-                <div class="stat-line" style="width:65%"></div>
-              </div>
-            </div>
-          </div>
-          <div class="project-overlay"><span class="project-view-btn">View Project ↗</span></div>
-        </div>
-        <div class="project-info">
-          <span class="project-cat">Web Development · University Project</span>
-          <h3 class="project-title">Athleo</h3>
-          <p class="project-desc">A football management platform connecting players, doctors, managers and fans.</p>
-          <div class="project-tags">
-            <span class="tag">PHP</span><span class="tag">Symfony</span><span class="tag">MySQL</span><span class="tag">JavaScript</span>
-          </div>
-        </div>
-      </article>
-
-      <!-- Project 02 — FAST FOOD FESTIVAL -->
-      <article class="project-card pc-2 reveal" data-cat="design">
-        <div class="project-visual">
-          <div class="mock-poster" aria-hidden="true">
-            <div>
-              <p class="p-eyebrow">Concept</p>
-              <h4 class="p-title">FAST<br>FOOD<br>FEST</h4>
-            </div>
-            <div class="p-circle"></div>
-            <p class="p-foot">VISUAL IDENTITY — 2026</p>
-          </div>
-          <div class="project-overlay"><span class="project-view-btn">View Project ↗</span></div>
-        </div>
-        <div class="project-info">
-          <span class="project-cat">Graphic Design · Concept</span>
-          <h3 class="project-title">Fast Food Festival</h3>
-          <p class="project-desc">Visual communication and promotional design for a food festival concept.</p>
-          <div class="project-tags">
-            <span class="tag">Branding</span><span class="tag">Print</span><span class="tag">Layout</span><span class="tag">Graphic Design</span>
-          </div>
-        </div>
-      </article>
-
-      <!-- Project 03 — AUTOMOTIVE CINEMATIC -->
-      <article class="project-card pc-3 reveal" data-cat="video">
-        <div class="project-visual">
-          <div class="mock-video" aria-hidden="true">
-            <div class="vig"></div>
-            <div class="play-btn"><svg width="20" height="20" viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20" fill="var(--accent)"/></svg></div>
-            <span class="timecode">00:00:12:04</span>
-          </div>
-          <div class="project-overlay"><span class="project-view-btn">View Project ↗</span></div>
-        </div>
-        <div class="project-info">
-          <span class="project-cat">Video Editing · Personal Project</span>
-          <h3 class="project-title">Automotive — Cinematic</h3>
-          <p class="project-desc">A cinematic automotive visual concept focused on motion, atmosphere and visual storytelling.</p>
-          <div class="project-tags">
-            <span class="tag">Video Editing</span><span class="tag">Color Grading</span><span class="tag">Motion</span>
-          </div>
-        </div>
-      </article>
-
-      <!-- Project 04 — MOBILE EXPERIENCE -->
-      <article class="project-card pc-4 reveal" data-cat="mobile">
-        <div class="project-visual">
-          <div class="mock-phone" aria-hidden="true">
-            <div class="notch"></div>
-            <div class="screen">
-              <div class="app-line" style="width:60%"></div>
-              <div class="app-line" style="width:40%"></div>
-              <div class="app-card"></div>
-            </div>
-          </div>
-          <div class="project-overlay"><span class="project-view-btn">View Project ↗</span></div>
-        </div>
-        <div class="project-info">
-          <span class="project-cat">Mobile Development · Concept</span>
-          <h3 class="project-title">Mobile Experience</h3>
-          <p class="project-desc">A mobile application concept focused on clean interaction and practical user experience.</p>
-          <div class="project-tags">
-            <span class="tag">Android</span><span class="tag">Java</span><span class="tag">UI/UX</span>
-          </div>
-        </div>
-      </article>
-
-      <!-- Project 05 — IDENTITY STUDY -->
-      <article class="project-card pc-5 reveal" data-cat="design">
-        <div class="project-visual">
-          <div class="mock-brand" aria-hidden="true">
-            <div class="swatch s1">D.</div>
-            <div class="swatch s2">IDENTITY</div>
-            <div class="swatch s3">Est. 2026</div>
-            <div class="swatch s4">Aa</div>
-          </div>
-          <div class="project-overlay"><span class="project-view-btn">View Project ↗</span></div>
-        </div>
-        <div class="project-info">
-          <span class="project-cat">Branding · Experimental Work</span>
-          <h3 class="project-title">Identity Study</h3>
-          <p class="project-desc">An experimental visual identity exploring typography, composition and modern branding.</p>
-          <div class="project-tags">
-            <span class="tag">Branding</span><span class="tag">Typography</span><span class="tag">Art Direction</span>
-          </div>
-        </div>
-      </article>
-
-      <!-- Project 06 — DIGITAL INTERFACE -->
-      <article class="project-card pc-6 reveal" data-cat="web">
-        <div class="project-visual">
-          <div class="mock-ui" aria-hidden="true">
-            <div class="sidebar">
-              <i class="on"></i><i></i><i></i><i></i>
-            </div>
-            <div class="main">
-              <div class="card"></div>
-              <div class="card"></div>
-              <div class="card" style="width:60%"></div>
-            </div>
-          </div>
-          <div class="project-overlay"><span class="project-view-btn">View Project ↗</span></div>
-        </div>
-        <div class="project-info">
-          <span class="project-cat">Web / UI Design · Concept</span>
-          <h3 class="project-title">Digital Interface</h3>
-          <p class="project-desc">A modern interface concept focused on clarity, hierarchy and interaction.</p>
-          <div class="project-tags">
-            <span class="tag">UI Design</span><span class="tag">Figma</span><span class="tag">Frontend</span>
-          </div>
-        </div>
-      </article>
-
-    </div>
+    <div class="project-grid" id="projectGrid"></div>
   </div>
 </section>
 
@@ -1404,15 +1384,17 @@ html, body{ max-width: 100%; overflow-x: hidden; }
           <span class="tool-tag reveal" style="--i:6">MySQL</span>
           <span class="tool-tag reveal" style="--i:7">Git</span>
           <span class="tool-tag reveal" style="--i:8">Linux</span>
+          <span class="tool-tag reveal" style="--i:9">C</span>
+          <span class="tool-tag reveal" style="--i:10">C++</span>
         </div>
       </div>
 
       <div>
         <p class="toolbox-group-label reveal">Design</p>
         <div class="tool-tags reveal-stagger">
-          <span class="tool-tag reveal" style="--i:0">Photoshop</span>
-          <span class="tool-tag reveal" style="--i:1">Illustrator</span>
-          <span class="tool-tag reveal" style="--i:2">Figma</span>
+          <span class="tool-tag tool-tag-icon reveal" style="--i:0"><img src="assets/whiteicons/AdobePhotoshop_white.svg" alt="" aria-hidden="true">Photoshop</span>
+          <span class="tool-tag tool-tag-icon reveal" style="--i:1"><img src="assets/whiteicons/AdobeIllustrator_white.svg" alt="" aria-hidden="true">Illustrator</span>
+          <span class="tool-tag tool-tag-icon reveal" style="--i:2"><img src="assets/whiteicons/Figma_white.svg" alt="" aria-hidden="true">Figma</span>
           <span class="tool-tag reveal" style="--i:3">Graphic Design</span>
           <span class="tool-tag reveal" style="--i:4">UI/UX</span>
           <span class="tool-tag reveal" style="--i:5">Branding</span>
@@ -1448,7 +1430,7 @@ html, body{ max-width: 100%; overflow-x: hidden; }
 
       <div class="stats reveal">
         <div class="stat">
-          <span class="stat-num">01+</span>
+          <span class="stat-num">05+</span>
           <span class="stat-label">Years learning &amp; creating</span>
         </div>
         <div class="stat">
@@ -1507,15 +1489,15 @@ html, body{ max-width: 100%; overflow-x: hidden; }
     <div class="contact-links reveal">
       <div>
         <p class="contact-link-label">Email</p>
-        <a href="mailto:allaguimeddhia@gmail.com" class="contact-link-value">allaguimeddhia@gmail.com</a>
+        <a href="mailto:allaguimeddhia@gmail.com" class="contact-link-value"><img src="assets/whiteicons/Gmail_white.svg" alt="" aria-hidden="true" class="contact-link-icon">allaguimeddhia@gmail.com</a>
       </div>
       <div>
         <p class="contact-link-label">GitHub</p>
-        <a href="https://github.com/DhiaAllagui" class="contact-link-value" target="_blank" rel="noopener">github.com/DhiaAllagui ↗</a>
+        <a href="https://github.com/DhiaAllagui" class="contact-link-value" target="_blank" rel="noopener"><img src="assets/whiteicons/Github_white.svg" alt="" aria-hidden="true" class="contact-link-icon">github.com/DhiaAllagui ↗</a>
       </div>
       <div>
         <p class="contact-link-label">LinkedIn</p>
-        <a href="https://www.linkedin.com/in/med-dhia-allagui-80123a280/" class="contact-link-value" target="_blank" rel="noopener">linkedin.com/in/med-dhia-allagui ↗</a>
+        <a href="https://www.linkedin.com/in/med-dhia-allagui-80123a280/" class="contact-link-value" target="_blank" rel="noopener"><img src="assets/whiteicons/LinkedIN_white.svg" alt="" aria-hidden="true" class="contact-link-icon">linkedin.com/in/med-dhia-allagui ↗</a>
       </div>
     </div>
   </div>
@@ -1540,6 +1522,482 @@ html, body{ max-width: 100%; overflow-x: hidden; }
   'use strict';
 
   var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* =========================================================
+     PROJECT DATA
+     Add new projects here — no other HTML edits needed.
+
+     Fields:
+       title         string
+       category      string, shown as the small eyebrow label
+       type          'design' | 'video' | 'web' | 'mobile' (drives the filter)
+       hosting       'static'      -> has a real GitHub Pages / external liveUrl, opens in a new tab
+                     'case-study'  -> no live hosting, opens the modal with description/contribution/tech
+                     'github-only' -> opens githubUrl directly, no live demo
+       description   string, used in the modal
+       contribution  array of strings (optional), "My Contribution" bullets in the modal
+       technologies  array of strings, shown as tag pills
+       image         path to a real thumbnail (optional). Falls back to the CSS mockup below if empty.
+       mockup        one of 'dashboard' | 'poster' | 'video' | 'phone' | 'brand' | 'ui' — used only when image is empty
+       gallery       array of image paths (optional), shown in the modal for design/case-study projects
+       video         path to a video file (optional), shown as a native player in the modal
+       liveUrl       real external/GitHub Pages URL (optional, only for hosting:'static')
+       githubUrl     real GitHub repo URL (optional)
+       size          grid span class: 'pc-1'/'pc-6' = span 4, 'pc-2'/'pc-5' = span 2, 'pc-3'/'pc-4' = span 3
+  ========================================================= */
+  var projects = [
+    {
+      title: 'Athleo',
+      category: 'Web Development · University Project',
+      type: 'web',
+      hosting: 'case-study',
+      description: 'A football management platform connecting players, doctors, managers and fans, with performance tracking, medical status and an admin dashboard.',
+      contribution: [],
+      technologies: ['PHP', 'Symfony', 'MySQL', 'JavaScript'],
+      image: 'assets/images/web/athleo/athleo-01.jpg',
+      mockup: 'dashboard',
+      gallery: [
+        'assets/images/web/athleo/athleo-01.jpg',
+        'assets/images/web/athleo/athleo-02.jpg',
+        'assets/images/web/athleo/athleo-03.jpg',
+        'assets/images/web/athleo/athleo-04.jpg',
+        'assets/images/web/athleo/athleo-05.jpg',
+        'assets/images/web/athleo/athleo-06.jpg',
+        'assets/images/web/athleo/athleo-07.jpg',
+        'assets/images/web/athleo/athleo-08.jpg',
+        'assets/images/web/athleo/athleo-09.jpg',
+        'assets/images/web/athleo/athleo-10.jpg',
+        'assets/images/web/athleo/athleo-11.jpg',
+        'assets/images/web/athleo/athleo-12.jpg',
+        'assets/images/web/athleo/athleo-13.jpg',
+        'assets/images/web/athleo/athleo-14.jpg',
+        'assets/images/web/athleo/athleo-15.jpg',
+        'assets/images/web/athleo/athleo-16.jpg',
+        'assets/images/web/athleo/athleo-17.jpg',
+        'assets/images/web/athleo/athleo-18.jpg',
+        'assets/images/web/athleo/athleo-19.jpg',
+        'assets/images/web/athleo/athleo-20.jpg',
+        'assets/images/web/athleo/athleo-21.jpg',
+        'assets/images/web/athleo/athleo-22.jpg'
+      ],
+      video: 'assets/videos/athleoad.mp4',
+      liveUrl: '',
+      githubUrl: '',
+      size: 'pc-1'
+    },
+    {
+      title: 'Fast Food Festival',
+      category: 'Graphic Design · Event Poster',
+      type: 'design',
+      hosting: 'case-study',
+      description: 'Visual communication and promotional poster design for Street & Fast Food Fest, a Tunisian Global Village event.',
+      contribution: [],
+      technologies: ['Branding', 'Print', 'Layout', 'Graphic Design'],
+      image: 'assets/images/graphic-design/sfffposter.png',
+      mockup: 'poster',
+      gallery: [],
+      video: '',
+      liveUrl: '',
+      githubUrl: '',
+      size: 'pc-2'
+    },
+    {
+      title: 'Automotive — Cinematic',
+      category: 'Video Editing · Personal Project',
+      type: 'video',
+      hosting: 'case-study',
+      description: 'A cinematic automotive visual concept focused on motion, atmosphere and visual storytelling.',
+      contribution: [],
+      technologies: ['Video Editing', 'Color Grading', 'Motion'],
+      image: '',
+      mockup: 'video',
+      gallery: [],
+      video: '',
+      liveUrl: '',
+      githubUrl: '',
+      size: 'pc-3'
+    },
+    {
+      title: 'Mobile Experience',
+      category: 'Mobile Development · Concept',
+      type: 'mobile',
+      hosting: 'case-study',
+      description: 'A mobile application concept focused on clean interaction and practical user experience.',
+      contribution: [],
+      technologies: ['Android', 'Java', 'UI/UX'],
+      image: '',
+      mockup: 'phone',
+      gallery: [],
+      video: '',
+      liveUrl: '',
+      githubUrl: '',
+      size: 'pc-4'
+    },
+    {
+      title: 'Identity Study',
+      category: 'Branding · Experimental Work',
+      type: 'design',
+      hosting: 'case-study',
+      description: 'An experimental visual identity exploring typography, composition and modern branding.',
+      contribution: [],
+      technologies: ['Branding', 'Typography', 'Art Direction'],
+      image: '',
+      mockup: 'brand',
+      gallery: [],
+      video: '',
+      liveUrl: '',
+      githubUrl: '',
+      size: 'pc-5'
+    },
+    {
+      title: 'Digital Interface',
+      category: 'Web / UI Design · Concept',
+      type: 'web',
+      hosting: 'case-study',
+      description: 'A modern interface concept focused on clarity, hierarchy and interaction.',
+      contribution: [],
+      technologies: ['UI Design', 'Figma', 'Frontend'],
+      image: '',
+      mockup: 'ui',
+      gallery: [],
+      video: '',
+      liveUrl: '',
+      githubUrl: '',
+      size: 'pc-6'
+    },
+    {
+      title: 'Forma Nova',
+      category: 'Graphic Design · Branding',
+      type: 'design',
+      hosting: 'case-study',
+      description: 'Visual identity and brand presentation design for Forma Nova, covering logo, colors and business-card layout.',
+      contribution: [],
+      technologies: ['Branding', 'Logo Design', 'Layout'],
+      image: 'assets/images/graphic-design/forma-nova-1.png',
+      mockup: 'poster',
+      gallery: ['assets/images/graphic-design/forma-nova-1.png', 'assets/images/graphic-design/forma-nova-2.png'],
+      video: '',
+      liveUrl: '',
+      githubUrl: '',
+      size: 'pc-3'
+    },
+    {
+      title: 'Discord Server Kit',
+      category: 'Graphic Design · Community Branding',
+      type: 'design',
+      hosting: 'case-study',
+      description: 'A themed set of banners and graphics for a Discord community, including server, subscribe and hardware-showcase banners.',
+      contribution: [],
+      technologies: ['Branding', 'Social Graphics', 'Layout'],
+      image: 'assets/images/graphic-design/discord-kit-1.png',
+      mockup: 'poster',
+      gallery: [
+        'assets/images/graphic-design/discord-kit-1.png',
+        'assets/images/graphic-design/discord-kit-2.png',
+        'assets/images/graphic-design/discord-kit-3.png',
+        'assets/images/graphic-design/discord-kit-4.png',
+        'assets/images/graphic-design/discord-kit-5.png',
+        'assets/images/graphic-design/discord-kit-6.png',
+        'assets/images/graphic-design/discord-kit-7.png',
+        'assets/images/graphic-design/discord-kit-8.png'
+      ],
+      video: '',
+      liveUrl: '',
+      githubUrl: '',
+      size: 'pc-3'
+    },
+    {
+      title: 'Eid Mubarak Poster',
+      category: 'Graphic Design · Social Poster',
+      type: 'design',
+      hosting: 'case-study',
+      description: 'A festive Eid Mubarak greeting poster designed for LEO Club Tunis Méditerranée.',
+      contribution: [],
+      technologies: ['Graphic Design', 'Social Media', 'Print'],
+      image: 'assets/images/graphic-design/eidmubarak.png',
+      mockup: 'poster',
+      gallery: [],
+      video: '',
+      liveUrl: '',
+      githubUrl: '',
+      size: 'pc-2'
+    },
+    {
+      title: 'Pinnacle Branding',
+      category: 'Graphic Design · Branding & Advertising',
+      type: 'design',
+      hosting: 'case-study',
+      description: 'Logo and promotional poster design for Pinnacle, paired with a short promotional video edit.',
+      contribution: [],
+      technologies: ['Branding', 'Logo Design', 'Advertising'],
+      image: 'assets/images/branding/pinnaclelogo.png',
+      mockup: 'brand',
+      gallery: ['assets/images/branding/pinnaclelogo.png', 'assets/images/graphic-design/pinnacleposter.png'],
+      video: 'assets/videos/pinnacle_ad.mp4',
+      liveUrl: '',
+      githubUrl: '',
+      size: 'pc-4'
+    },
+    {
+      title: 'Builders Logo',
+      category: 'Graphic Design · Logo Design',
+      type: 'design',
+      hosting: 'case-study',
+      description: 'A logo design exploration for a brand called Builders.',
+      contribution: [],
+      technologies: ['Logo Design', 'Branding'],
+      image: 'assets/images/branding/builders.png',
+      mockup: 'brand',
+      gallery: [],
+      video: '',
+      liveUrl: '',
+      githubUrl: '',
+      size: 'pc-2'
+    },
+    {
+      title: 'Chkobba Branding',
+      category: 'Graphic Design · Branding',
+      type: 'design',
+      hosting: 'case-study',
+      description: 'Brand identity design for Chkobba.',
+      contribution: [],
+      technologies: ['Branding', 'Logo Design'],
+      image: 'assets/images/branding/chkobba.png',
+      mockup: 'brand',
+      gallery: [],
+      video: '',
+      liveUrl: '',
+      githubUrl: '',
+      size: 'pc-2'
+    },
+    {
+      title: 'Fan Art Posters',
+      category: 'Graphic Design · Fan Art',
+      type: 'design',
+      hosting: 'case-study',
+      description: 'A series of character and brand fan-art posters made as personal design practice, spanning games, movies and sports.',
+      contribution: [],
+      technologies: ['Graphic Design', 'Fan Art', 'Layout', 'Typography'],
+      image: 'assets/images/graphic-design/fanart-jett.png',
+      mockup: 'poster',
+      gallery: [
+        'assets/images/graphic-design/fanart-jett.png',
+        'assets/images/graphic-design/fanart-spiderman.png',
+        'assets/images/graphic-design/fanart-god-of-war.png',
+        'assets/images/graphic-design/fanart-got-dracarys.png',
+        'assets/images/graphic-design/fanart-nike-cr7.png',
+        'assets/images/graphic-design/fanart-nike-justdoit.png'
+      ],
+      video: '',
+      liveUrl: '',
+      githubUrl: '',
+      size: 'pc-2'
+    },
+    {
+      title: 'Poster Collection',
+      category: 'Graphic Design · Poster Series',
+      type: 'design',
+      hosting: 'case-study',
+      description: 'A collection of promotional poster designs spanning multiple concepts and events.',
+      contribution: [],
+      technologies: ['Graphic Design', 'Print', 'Layout'],
+      image: '',
+      mockup: 'document',
+      gallery: [],
+      video: '',
+      pdf: 'assets/images/graphic-design/posters.pdf',
+      liveUrl: '',
+      githubUrl: '',
+      size: 'pc-2'
+    },
+    {
+      title: 'Offline',
+      category: 'Video Editing · Motion Graphics',
+      type: 'video',
+      hosting: 'case-study',
+      description: 'A short motion graphics / video edit exploring an "offline" visual concept.',
+      contribution: [],
+      technologies: ['Video Editing', 'Motion Graphics'],
+      image: '',
+      mockup: 'video',
+      gallery: [],
+      video: 'assets/images/graphic-design/offline.mp4',
+      liveUrl: '',
+      githubUrl: '',
+      size: 'pc-3'
+    },
+    {
+      title: 'Ramadan Mubarak',
+      category: 'Video Editing · Social Content',
+      type: 'video',
+      hosting: 'case-study',
+      description: 'A short Ramadan Mubarak greeting video edit designed for social media sharing.',
+      contribution: [],
+      technologies: ['Video Editing', 'Motion Graphics', 'Social Media'],
+      image: '',
+      mockup: 'video',
+      gallery: [],
+      video: 'assets/images/graphic-design/ramadan-mubarak.mp4',
+      liveUrl: '',
+      githubUrl: '',
+      size: 'pc-3'
+    }
+  ];
+
+  var mockupTemplates = {
+    dashboard: '<div class="mock-dashboard" aria-hidden="true">'
+      + '<div class="bar"><span class="dotc"></span><span class="dotc"></span><span class="dotc"></span></div>'
+      + '<div class="row">'
+      + '<div class="col"><div class="bar-chart"><i style="height:40%"></i><i style="height:70%"></i><i style="height:50%"></i><i style="height:90%"></i><i style="height:60%"></i></div></div>'
+      + '<div class="col"><div class="stat-line" style="width:80%"></div><div class="stat-line" style="width:55%"></div><div class="stat-line" style="width:65%"></div></div>'
+      + '</div></div>',
+    poster: '<div class="mock-poster" aria-hidden="true">'
+      + '<div><p class="p-eyebrow">Concept</p><h4 class="p-title">FAST<br>FOOD<br>FEST</h4></div>'
+      + '<div class="p-circle"></div><p class="p-foot">VISUAL IDENTITY — 2026</p></div>',
+    video: '<div class="mock-video" aria-hidden="true"><div class="vig"></div>'
+      + '<div class="play-btn"><svg width="20" height="20" viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20" fill="var(--accent)"/></svg></div>'
+      + '<span class="timecode">00:00:12:04</span></div>',
+    phone: '<div class="mock-phone" aria-hidden="true"><div class="notch"></div>'
+      + '<div class="screen"><div class="app-line" style="width:60%"></div><div class="app-line" style="width:40%"></div><div class="app-card"></div></div></div>',
+    brand: '<div class="mock-brand" aria-hidden="true">'
+      + '<div class="swatch s1">D.</div><div class="swatch s2">IDENTITY</div><div class="swatch s3">Est. 2026</div><div class="swatch s4">Aa</div></div>',
+    ui: '<div class="mock-ui" aria-hidden="true"><div class="sidebar"><i class="on"></i><i></i><i></i><i></i></div>'
+      + '<div class="main"><div class="card"></div><div class="card"></div><div class="card" style="width:60%"></div></div></div>',
+    document: '<div class="mock-document" aria-hidden="true">'
+      + '<svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5"><path d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 16.5h6M9 9.5h2"/></svg>'
+      + '<p class="doc-label">PDF Document</p></div>'
+  };
+
+  var ctaLabels = { static: 'View Live Project ↗', 'case-study': 'View Case Study ↗', 'github-only': 'View on GitHub ↗' };
+  var typeCtaOverrides = { video: 'Watch Project ↗' };
+
+  function escapeHtml(str){
+    var div = document.createElement('div');
+    div.textContent = str || '';
+    return div.innerHTML;
+  }
+
+  function ctaLabelFor(project){
+    if(project.hosting === 'static' && project.liveUrl){ return ctaLabels.static; }
+    if(project.hosting === 'github-only' && project.githubUrl){ return ctaLabels['github-only']; }
+    if(typeCtaOverrides[project.type]){ return typeCtaOverrides[project.type]; }
+    return ctaLabels['case-study'];
+  }
+
+  function opensExternally(project){
+    return (project.hosting === 'static' && project.liveUrl) || (project.hosting === 'github-only' && project.githubUrl);
+  }
+
+  /* =========================================================
+     RENDER PROJECT GRID
+  ========================================================= */
+  var projectGrid = document.getElementById('projectGrid');
+
+  function renderProjects(){
+    projectGrid.innerHTML = projects.map(function(project, index){
+      var visual = project.image
+        ? '<img src="' + escapeHtml(project.image) + '" alt="' + escapeHtml(project.title) + '" loading="lazy">'
+        : (mockupTemplates[project.mockup] || '');
+
+      return '<article class="project-card ' + project.size + ' reveal" data-cat="' + project.type + '" data-index="' + index + '" tabindex="0" role="button" aria-haspopup="dialog">'
+        + '<div class="project-visual">' + visual
+        + '<div class="project-overlay"><span class="project-view-btn">' + ctaLabelFor(project) + '</span></div>'
+        + '</div>'
+        + '<div class="project-info">'
+        + '<span class="project-cat">' + escapeHtml(project.category) + '</span>'
+        + '<h3 class="project-title">' + escapeHtml(project.title) + '</h3>'
+        + '<p class="project-desc">' + escapeHtml(project.description) + '</p>'
+        + '<div class="project-tags">' + project.technologies.map(function(t){ return '<span class="tag">' + escapeHtml(t) + '</span>'; }).join('') + '</div>'
+        + '</div></article>';
+    }).join('');
+  }
+
+  function handleCardActivate(card){
+    var project = projects[Number(card.getAttribute('data-index'))];
+    if(!project){ return; }
+    if(opensExternally(project)){
+      window.open(project.hosting === 'static' ? project.liveUrl : project.githubUrl, '_blank', 'noopener,noreferrer');
+    } else {
+      openProjectModal(project, card);
+    }
+  }
+
+  /* =========================================================
+     PROJECT MODAL
+  ========================================================= */
+  var projectModal = document.getElementById('projectModal');
+  var modalBody = document.getElementById('modalBody');
+  var modalClose = document.getElementById('modalClose');
+  var lastFocusedEl = null;
+
+  function buildModalBody(project){
+    var html = '<span class="modal-cat">' + escapeHtml(project.category) + '</span>'
+      + '<h2 class="modal-title" id="modalTitle">' + escapeHtml(project.title) + '</h2>'
+      + '<p class="modal-desc">' + escapeHtml(project.description) + '</p>';
+
+    if(!project.image && !project.video && !project.gallery.length){
+      html += (mockupTemplates[project.mockup] || '').replace('aria-hidden="true"', 'aria-hidden="true" style="width:100%;height:220px;margin-top:16px;"');
+    }
+    if(project.image && !project.gallery.length){
+      html += '<img class="modal-thumb" src="' + escapeHtml(project.image) + '" alt="' + escapeHtml(project.title) + '">';
+    }
+    if(project.video){
+      html += '<div class="modal-video"><video controls preload="metadata" src="' + escapeHtml(project.video) + '"></video></div>';
+    }
+    if(project.gallery && project.gallery.length){
+      html += '<div class="modal-gallery">' + project.gallery.map(function(src){
+        return '<img src="' + escapeHtml(src) + '" alt="' + escapeHtml(project.title) + ' screenshot" loading="lazy">';
+      }).join('') + '</div>';
+    }
+    if(project.contribution && project.contribution.length){
+      html += '<p class="modal-section-label">My Contribution</p>'
+        + '<ul class="modal-contribution">' + project.contribution.map(function(c){ return '<li>' + escapeHtml(c) + '</li>'; }).join('') + '</ul>';
+    }
+    html += '<p class="modal-section-label">Technologies</p>'
+      + '<div class="modal-tags">' + project.technologies.map(function(t){ return '<span class="tag">' + escapeHtml(t) + '</span>'; }).join('') + '</div>';
+
+    var actions = '';
+    if(project.liveUrl){
+      actions += '<a class="btn btn-primary" href="' + escapeHtml(project.liveUrl) + '" target="_blank" rel="noopener noreferrer">Live Demo <span class="arrow">↗</span></a>';
+    }
+    if(project.githubUrl){
+      actions += '<a class="btn" href="' + escapeHtml(project.githubUrl) + '" target="_blank" rel="noopener noreferrer">View GitHub <span class="arrow">↗</span></a>';
+    }
+    if(project.pdf){
+      actions += '<a class="btn" href="' + escapeHtml(project.pdf) + '" target="_blank" rel="noopener noreferrer">View Full Poster (PDF) <span class="arrow">↗</span></a>';
+    }
+    if(actions){ html += '<div class="modal-actions">' + actions + '</div>'; }
+
+    if(!project.liveUrl && !project.githubUrl && !project.pdf){
+      html += '<p class="modal-note">This project doesn\'t have public hosting yet. Reach out for a full walkthrough.</p>';
+    }
+
+    return html;
+  }
+
+  function openProjectModal(project, triggerEl){
+    modalBody.innerHTML = buildModalBody(project);
+    lastFocusedEl = triggerEl || document.activeElement;
+    projectModal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    modalClose.focus();
+  }
+
+  function closeProjectModal(){
+    projectModal.classList.remove('active');
+    document.body.style.overflow = '';
+    if(lastFocusedEl && typeof lastFocusedEl.focus === 'function'){ lastFocusedEl.focus(); }
+  }
+
+  modalClose.addEventListener('click', closeProjectModal);
+  projectModal.addEventListener('click', function(e){
+    if(e.target === projectModal){ closeProjectModal(); }
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && projectModal.classList.contains('active')){ closeProjectModal(); }
+  });
+
+  renderProjects();
 
   /* =========================================================
      NAVIGATION SCROLL STATE
@@ -1643,6 +2101,19 @@ html, body{ max-width: 100%; overflow-x: hidden; }
           }, 250);
         }
       });
+    });
+  });
+
+  /* =========================================================
+     PROJECT CARD ACTIVATION (click / keyboard)
+  ========================================================= */
+  projectCards.forEach(function(card){
+    card.addEventListener('click', function(){ handleCardActivate(card); });
+    card.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' || e.key === ' '){
+        e.preventDefault();
+        handleCardActivate(card);
+      }
     });
   });
 
