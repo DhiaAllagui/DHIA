@@ -27,4 +27,4 @@ npx serve .
 
 ## Deploying
 
-Any static host works (GitHub Pages, Netlify, Vercel). For GitHub Pages: enable Pages on this repo for the `main` branch, root directory.
+https://github.com/DhiaAllagui/dhiaallagui.git
