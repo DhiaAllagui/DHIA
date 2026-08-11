@@ -1847,13 +1847,17 @@ html, body{ max-width: 100%; overflow-x: hidden; }
       category: 'Web Development · Event Website & App',
       type: 'web',
       hosting: 'static',
-      description: 'The official event website and companion app for Street & Fast Food Fest, a food festival hosted by the Tunisian Global Village at Les Berges du Lac.',
+      description: 'The official event website and companion app for Street & Fast Food Fest, a food festival hosted by the Tunisian Global Village at Les Berges du Lac. Also designed the event\'s diplomatic partnership dossier and official sponsorship guide.',
       contribution: [],
-      technologies: ['Web Development', 'Event Site'],
-      image: '',
+      technologies: ['Web Development', 'Event Site', 'Document Design'],
+      image: 'assets/images/thumbnails/sfff.webp',
       mockup: 'ui',
       gallery: [],
       video: '',
+      documents: [
+        { label: 'Diplomatic Partnership Dossier (PDF)', href: 'assets/documents/SFFF20_3 EN.PDF_compressed.pdf' },
+        { label: 'Sponsorship Guide (PDF)', href: 'assets/documents/SFFF ANGLAIS finale.PDF_compressed.pdf' }
+      ],
       liveUrl: 'https://globalvillagetunisia.com',
       githubUrl: '',
       size: 'pc-3'
@@ -1866,7 +1870,7 @@ html, body{ max-width: 100%; overflow-x: hidden; }
       description: 'A demo e-commerce website concept for a sneaker store, "The Syndicate."',
       contribution: [],
       technologies: ['HTML', 'CSS', 'JavaScript', 'E-Commerce'],
-      image: '',
+      image: 'assets/images/thumbnails/mafiastore.jpg',
       mockup: 'ui',
       gallery: [],
       video: '',
@@ -1882,7 +1886,7 @@ html, body{ max-width: 100%; overflow-x: hidden; }
       description: 'A demo e-commerce website concept for a women\'s fashion and accessories store.',
       contribution: [],
       technologies: ['HTML', 'CSS', 'JavaScript', 'E-Commerce'],
-      image: '',
+      image: 'assets/images/thumbnails/veronalogo.jpg',
       mockup: 'ui',
       gallery: [],
       video: '',
@@ -1898,7 +1902,7 @@ html, body{ max-width: 100%; overflow-x: hidden; }
       description: 'A demo website concept for a premium car dealership based in Le Bardo.',
       contribution: [],
       technologies: ['HTML', 'CSS', 'JavaScript'],
-      image: '',
+      image: 'assets/images/thumbnails/logoghaliauto.png',
       mockup: 'ui',
       gallery: [],
       video: '',
@@ -1914,7 +1918,7 @@ html, body{ max-width: 100%; overflow-x: hidden; }
       description: 'A demo e-commerce website concept for a streetwear sneaker store.',
       contribution: [],
       technologies: ['HTML', 'CSS', 'JavaScript', 'E-Commerce'],
-      image: '',
+      image: 'assets/images/thumbnails/logocatchy99.png',
       mockup: 'ui',
       gallery: [],
       video: '',
@@ -1965,6 +1969,7 @@ html, body{ max-width: 100%; overflow-x: hidden; }
   }
 
   function opensExternally(project){
+    if(project.documents && project.documents.length){ return false; }
     return (project.hosting === 'static' && project.liveUrl) || (project.hosting === 'github-only' && project.githubUrl);
   }
 
@@ -2046,9 +2051,14 @@ html, body{ max-width: 100%; overflow-x: hidden; }
     if(project.pdf){
       actions += '<a class="btn" href="' + escapeHtml(project.pdf) + '" target="_blank" rel="noopener noreferrer">View Full Poster (PDF) <span class="arrow">↗</span></a>';
     }
+    if(project.documents && project.documents.length){
+      actions += project.documents.map(function(doc){
+        return '<a class="btn" href="' + escapeHtml(doc.href) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(doc.label) + ' <span class="arrow">↗</span></a>';
+      }).join('');
+    }
     if(actions){ html += '<div class="modal-actions">' + actions + '</div>'; }
 
-    if(!project.liveUrl && !project.githubUrl && !project.pdf){
+    if(!project.liveUrl && !project.githubUrl && !project.pdf && !(project.documents && project.documents.length)){
       html += '<p class="modal-note">This project doesn\'t have public hosting yet. Reach out for a full walkthrough.</p>';
     }
 
