@@ -306,6 +306,9 @@ button:focus-visible,
   padding-top: 120px;
   padding-bottom: 60px;
   overflow:hidden;
+  background:
+    radial-gradient(ellipse 70% 55% at 50% 0%, var(--accent-dim) 0%, transparent 60%),
+    linear-gradient(160deg, var(--surface) 0%, var(--bg) 55%, #050505 100%);
 }
 .hero-decor{
   position:absolute;
@@ -370,6 +373,41 @@ button:focus-visible,
 .hero-headline .line:nth-child(2) span{ animation-delay: 220ms; }
 .hero-headline .line:nth-child(3) span{ animation-delay: 340ms; color: var(--accent); }
 @keyframes lineUp{ to{ transform: translateY(0); } }
+
+/* Glitch text-swap on the hero headline */
+.hero-headline-swap{
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  user-select: none;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+}
+.hero-headline-swap:focus-visible{
+  outline: 2px solid var(--accent);
+  outline-offset: 8px;
+}
+.hero-headline-swap .swap-layer{
+  display: block;
+}
+.hero-headline-swap .swap-layer.alt{
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+.hero-headline-swap canvas{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
 
 .hero-sub{
   max-width: 560px;
@@ -451,6 +489,34 @@ button:focus-visible,
   line-height: 1.75;
 }
 .intro-row{ display:flex; flex-direction:column; }
+
+.intro-layout{
+  display:flex;
+  gap: 64px;
+  align-items:flex-start;
+}
+.intro-photo{
+  flex-shrink:0;
+  width: 220px;
+  border-radius: 8px;
+  overflow:hidden;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+}
+.intro-photo img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  aspect-ratio: 1 / 1;
+  filter: grayscale(0.35);
+  transition: filter var(--dur) var(--ease);
+}
+.intro-photo:hover img{ filter: grayscale(0); }
+.intro-text-col{ flex:1; min-width:0; }
+@media (max-width: 860px){
+  .intro-layout{ flex-direction:column; gap: 32px; }
+  .intro-photo{ width: 160px; }
+}
 
 /* =========================================================
    SERVICES
@@ -555,11 +621,25 @@ button:focus-visible,
   margin-top: 22px;
 }
 
+.featured-work-label{
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text);
+  font-weight: 600;
+  margin-top: 40px;
+  margin-bottom: 20px;
+}
+.featured-grid{ margin-bottom: 8px; }
+
+.all-work-head{ margin-top: 88px; }
+
 .filters{
   display:flex;
   gap: 10px;
   flex-wrap:wrap;
-  margin-top: 56px;
+  margin-top: 20px;
   margin-bottom: 40px;
 }
 .filter-btn{
@@ -1204,9 +1284,18 @@ html, body{ max-width: 100%; overflow-x: hidden; }
     <p class="hero-eyebrow"><span class="dot"></span> Creative Developer / Designer</p>
 
     <h1 class="hero-headline">
-      <span class="line"><span>I Design.</span></span>
-      <span class="line"><span>I Build.</span></span>
-      <span class="line"><span>I Create.</span></span>
+      <button type="button" class="hero-headline-swap" id="heroSwap" aria-label="Toggle headline">
+        <span class="swap-layer primary">
+          <span class="line"><span>I Design.</span></span>
+          <span class="line"><span>I Build.</span></span>
+          <span class="line"><span>I Create.</span></span>
+        </span>
+        <span class="swap-layer alt" aria-hidden="true">
+          <span class="line"><span>Med Dhia</span></span>
+          <span class="line"><span>Allagui</span></span>
+        </span>
+        <canvas id="heroSwapCanvas" aria-hidden="true"></canvas>
+      </button>
     </h1>
 
     <p class="hero-sub">Graphic design, video editing, web development and mobile experiences — brought together in one creative workflow.</p>
@@ -1227,9 +1316,14 @@ html, body{ max-width: 100%; overflow-x: hidden; }
 <section class="section" id="intro" aria-labelledby="intro-heading">
   <div class="container">
     <p class="eyebrow reveal">01 — About</p>
-    <div class="intro-row">
-      <p class="intro-text reveal" id="intro-heading">I'm a student and creative developer who enjoys turning ideas into visual experiences, <span class="hl">websites</span> and applications.</p>
-      <p class="intro-text-2 reveal">My work sits between <span class="hl">design</span> and <span class="hl">technology</span>. I care about how something looks, how it works, and how people <span class="hl">experience</span> it.</p>
+    <div class="intro-layout">
+      <div class="intro-photo reveal">
+        <img src="assets/images/me/dhiaallagui.jpeg" alt="Portrait of Med Dhia Allagui">
+      </div>
+      <div class="intro-text-col intro-row">
+        <p class="intro-text reveal" id="intro-heading">I'm a student and creative developer who enjoys turning ideas into visual experiences, <span class="hl">websites</span> and applications.</p>
+        <p class="intro-text-2 reveal">My work sits between <span class="hl">design</span> and <span class="hl">technology</span>. I care about how something looks, how it works, and how people <span class="hl">experience</span> it.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -1310,8 +1404,18 @@ html, body{ max-width: 100%; overflow-x: hidden; }
       </div>
     </div>
 
+    <div class="featured-work">
+      <p class="featured-work-label reveal">Client &amp; Professional Work</p>
+      <div class="project-grid featured-grid" id="featuredGrid"></div>
+    </div>
+
+    <div class="all-work-head">
+      <p class="eyebrow reveal">All Work</p>
+    </div>
+
     <div class="filters" role="tablist" aria-label="Filter projects">
       <button class="filter-btn active" data-filter="all" role="tab" aria-selected="true">All</button>
+      <button class="filter-btn" data-filter="client" role="tab" aria-selected="false">Client Work</button>
       <button class="filter-btn" data-filter="design" role="tab" aria-selected="false">Design</button>
       <button class="filter-btn" data-filter="video" role="tab" aria-selected="false">Video</button>
       <button class="filter-btn" data-filter="web" role="tab" aria-selected="false">Web</button>
@@ -1375,17 +1479,17 @@ html, body{ max-width: 100%; overflow-x: hidden; }
       <div>
         <p class="toolbox-group-label reveal">Development</p>
         <div class="tool-tags reveal-stagger">
-          <span class="tool-tag reveal" style="--i:0">HTML</span>
-          <span class="tool-tag reveal" style="--i:1">CSS</span>
-          <span class="tool-tag reveal" style="--i:2">JavaScript</span>
-          <span class="tool-tag reveal" style="--i:3">PHP</span>
-          <span class="tool-tag reveal" style="--i:4">Symfony</span>
-          <span class="tool-tag reveal" style="--i:5">Java</span>
-          <span class="tool-tag reveal" style="--i:6">MySQL</span>
-          <span class="tool-tag reveal" style="--i:7">Git</span>
-          <span class="tool-tag reveal" style="--i:8">Linux</span>
-          <span class="tool-tag reveal" style="--i:9">C</span>
-          <span class="tool-tag reveal" style="--i:10">C++</span>
+          <span class="tool-tag tool-tag-icon reveal" style="--i:0"><img src="assets/whiteicons/HTML5_white.svg" alt="" aria-hidden="true">HTML</span>
+          <span class="tool-tag tool-tag-icon reveal" style="--i:1"><img src="assets/whiteicons/CSS3_white.svg" alt="" aria-hidden="true">CSS</span>
+          <span class="tool-tag tool-tag-icon reveal" style="--i:2"><img src="assets/whiteicons/JavaScript_white.svg" alt="" aria-hidden="true">JavaScript</span>
+          <span class="tool-tag tool-tag-icon reveal" style="--i:3"><img src="assets/whiteicons/PHP_white.svg" alt="" aria-hidden="true">PHP</span>
+          <span class="tool-tag tool-tag-icon reveal" style="--i:4"><img src="assets/whiteicons/Symfony_white.svg" alt="" aria-hidden="true">Symfony</span>
+          <span class="tool-tag tool-tag-icon reveal" style="--i:5"><img src="assets/whiteicons/Java_white.svg" alt="" aria-hidden="true">Java</span>
+          <span class="tool-tag tool-tag-icon reveal" style="--i:6"><img src="assets/whiteicons/MySQL_white.svg" alt="" aria-hidden="true">MySQL</span>
+          <span class="tool-tag tool-tag-icon reveal" style="--i:7"><img src="assets/whiteicons/Git_white.svg" alt="" aria-hidden="true">Git</span>
+          <span class="tool-tag tool-tag-icon reveal" style="--i:8"><img src="assets/whiteicons/Linux_white.svg" alt="" aria-hidden="true">Linux</span>
+          <span class="tool-tag tool-tag-icon reveal" style="--i:9"><img src="assets/whiteicons/C_white.svg" alt="" aria-hidden="true">C</span>
+          <span class="tool-tag tool-tag-icon reveal" style="--i:10"><img src="assets/whiteicons/Cpp_white.svg" alt="" aria-hidden="true">C++</span>
         </div>
       </div>
 
@@ -1404,8 +1508,8 @@ html, body{ max-width: 100%; overflow-x: hidden; }
       <div>
         <p class="toolbox-group-label reveal">Video</p>
         <div class="tool-tags reveal-stagger">
-          <span class="tool-tag reveal" style="--i:0">Premiere Pro</span>
-          <span class="tool-tag reveal" style="--i:1">After Effects</span>
+          <span class="tool-tag tool-tag-icon reveal" style="--i:0"><img src="assets/whiteicons/PremierePro_white.svg" alt="" aria-hidden="true">Premiere Pro</span>
+          <span class="tool-tag tool-tag-icon reveal" style="--i:1"><img src="assets/whiteicons/AfterEffects_white.svg" alt="" aria-hidden="true">After Effects</span>
           <span class="tool-tag reveal" style="--i:2">Video Editing</span>
           <span class="tool-tag reveal" style="--i:3">Motion Graphics</span>
           <span class="tool-tag reveal" style="--i:4">Color Grading</span>
@@ -1492,6 +1596,10 @@ html, body{ max-width: 100%; overflow-x: hidden; }
         <a href="mailto:allaguimeddhia@gmail.com" class="contact-link-value"><img src="assets/whiteicons/Gmail_white.svg" alt="" aria-hidden="true" class="contact-link-icon">allaguimeddhia@gmail.com</a>
       </div>
       <div>
+        <p class="contact-link-label">WhatsApp</p>
+        <a href="https://wa.me/21620804721" class="contact-link-value" target="_blank" rel="noopener"><img src="assets/whiteicons/WhatsApp_white.svg" alt="" aria-hidden="true" class="contact-link-icon">+216 20 804 721</a>
+      </div>
+      <div>
         <p class="contact-link-label">GitHub</p>
         <a href="https://github.com/DhiaAllagui" class="contact-link-value" target="_blank" rel="noopener"><img src="assets/whiteicons/Github_white.svg" alt="" aria-hidden="true" class="contact-link-icon">github.com/DhiaAllagui ↗</a>
       </div>
@@ -1544,13 +1652,115 @@ html, body{ max-width: 100%; overflow-x: hidden; }
        liveUrl       real external/GitHub Pages URL (optional, only for hosting:'static')
        githubUrl     real GitHub repo URL (optional)
        size          grid span class: 'pc-1'/'pc-6' = span 4, 'pc-2'/'pc-5' = span 2, 'pc-3'/'pc-4' = span 3
+       featured      true (optional) -> also shown in the "Featured Work" row above the full grid.
+                     Reserve this for real client/professional work, not demos or design practice.
+
+     Order matters for the "All" filter view: real client/professional work is listed first,
+     then practice/demo sites, then pure design & video pieces. Add new real client work near
+     the top of the array, and mark it featured: true if it's one of your best 3-4 pieces.
   ========================================================= */
   var projects = [
+    /* ---- Real client / professional work (shown first, best pieces featured) ---- */
+    {
+      title: 'COMCOM Group International',
+      category: 'Web Development · Corporate Website',
+      type: 'web',
+      hosting: 'static',
+      featured: true,
+      description: 'A full corporate website designed and built for COMCOM Group International, a Delaware-registered global media, live-events and entertainment holding company operating across the USA, UAE, Tunisia and Saudi Arabia. Premium, editorial visual design with heavy motion and full multi-language support, positioned as a single-page investor-and-portfolio site for a multi-market entertainment conglomerate.',
+      contribution: [
+        'The Challenge: present a multi-market, multi-language holding company — spanning media, live events and entertainment across four countries — as one coherent, high-production-value brand, without the site collapsing under its own motion and interaction budget.',
+        'Built a dark, editorial visual system with a custom motion engine: scroll-reveal animations, a kinetic animated headline with rotating text, and sparkle/particle effects.',
+        'Shipped full English, French and Arabic support via react-i18next, including complete RTL layout switching for Arabic.',
+        'Designed a responsive "Tri-Engine" business model showcase and an 8-division services grid.',
+        'Built an interactive project/case-study gallery with a lightbox-style modal viewer.',
+        'Built a custom contact form with real-time validation and department-based routing.',
+        'Made the whole experience fully responsive across mobile, tablet and desktop, with WCAG-conscious color contrast and keyboard accessibility.',
+        'Production-hardened the build: optimized WebP imagery, lazy-loading, full SEO metadata (Open Graph, Twitter Cards, sitemap) and security headers.'
+      ],
+      technologies: ['React 18', 'Vite', 'Tailwind CSS', 'Framer Motion', 'react-i18next'],
+      image: 'assets/images/web/comcom/comcom.png',
+      mockup: 'ui',
+      gallery: [],
+      video: '',
+      liveUrl: 'https://comcomgroupcompany.com',
+      githubUrl: '',
+      size: 'pc-3'
+    },
+    {
+      title: 'Tagine Beverly Hills',
+      category: 'Web Development · Restaurant Website',
+      type: 'web',
+      hosting: 'static',
+      featured: true,
+      description: 'A restaurant website for Tagine, an intimate 35-seat Moroccan fine-dining spot on Robertson Boulevard in Beverly Hills, California. Dark, candlelit visual design that mirrors the restaurant\'s own atmosphere, built around reservations, menus and the story behind the space.',
+      contribution: [
+        'Designed a moody, cinematic homepage built around a full-bleed candlelit dining photo, matching the restaurant\'s own in-room atmosphere rather than a generic bright food-site look.',
+        'Built clear, high-intent navigation (Menu, Our Story, Private Events, Gift Cards, Contact) with reservations as the single, unmissable primary action.',
+        'Added a live status strip (tonight\'s seating, dinner hours, phone number) so visitors get real-time practical info without hunting for it.',
+        'Designed an "Our Story" page introducing Chef Ben Benameur, with quotes, press mentions and the restaurant\'s heritage.',
+        'Built a full multi-step table reservation flow: party size, date, service and time slot, seating preference and a live table summary.',
+        'Built a Gift Cards page with selectable certificate values, a personalized message field and a live gift-card preview.',
+        'Kept the layout intentionally minimal and restrained to match a 12-table, reservation-only dining concept.'
+      ],
+      technologies: ['Web Development', 'UI/UX', 'Responsive Design'],
+      image: 'assets/images/web/tagine/tagine-hero.png',
+      mockup: 'ui',
+      gallery: [
+        'assets/images/web/tagine/tagine-hero.png',
+        'assets/images/web/tagine/chef.png',
+        'assets/images/web/tagine/tagineres.png',
+        'assets/images/web/tagine/tagingift.png'
+      ],
+      video: '',
+      liveUrl: 'https://www.taginebeverlyhills.com',
+      githubUrl: '',
+      size: 'pc-3'
+    },
+    {
+      title: 'Street & Fast Food Fest',
+      category: 'Web Development · Event Website',
+      type: 'web',
+      hosting: 'static',
+      featured: true,
+      description: 'The official event website for Street & Fast Food Fest, a food festival hosted by the Tunisian Global Village at Les Berges du Lac. Also designed the event\'s diplomatic partnership dossier and official sponsorship guide.',
+      contribution: [],
+      technologies: ['Web Development', 'Event Site', 'Document Design'],
+      image: 'assets/images/thumbnails/sfff.webp',
+      mockup: 'ui',
+      gallery: [],
+      video: '',
+      documents: [
+        { label: 'Diplomatic Partnership Dossier (PDF)', href: 'assets/documents/SFFF20_3 EN.PDF_compressed.pdf' },
+        { label: 'Sponsorship Guide (PDF)', href: 'assets/documents/SFFF ANGLAIS finale.PDF_compressed.pdf' }
+      ],
+      liveUrl: 'https://globalvillagetunisia.com',
+      githubUrl: '',
+      size: 'pc-3'
+    },
+    {
+      title: 'Street & Fast Food Fest — App',
+      category: 'Mobile Development · Event Companion App',
+      type: 'mobile',
+      hosting: 'static',
+      featured: true,
+      description: 'A mobile companion experience for Street & Fast Food Fest attendees, including the festival passport, schedule and cashless wallet.',
+      contribution: [],
+      technologies: ['Mobile Development', 'UI/UX'],
+      image: 'assets/images/web/sfff/app.png',
+      mockup: 'phone',
+      gallery: [],
+      video: '',
+      liveUrl: 'https://fastfoodfestival.com',
+      githubUrl: '',
+      size: 'pc-2'
+    },
     {
       title: 'Athleo',
       category: 'Web Development · University Project',
       type: 'web',
       hosting: 'case-study',
+      featured: true,
       description: 'A football management platform connecting players, doctors, managers and fans, with performance tracking, medical status and an admin dashboard.',
       contribution: [],
       technologies: ['PHP', 'Symfony', 'MySQL', 'JavaScript'],
@@ -1586,6 +1796,22 @@ html, body{ max-width: 100%; overflow-x: hidden; }
       size: 'pc-1'
     },
     {
+      title: 'Chkobba',
+      category: 'Web Development · Branding & Game',
+      type: 'web',
+      hosting: 'static',
+      description: 'A digital version of Chkobba, the traditional Tunisian card game, including its brand identity and logo design.',
+      contribution: [],
+      technologies: ['Branding', 'Logo Design', 'Web Development'],
+      image: 'assets/images/branding/chkobba.png',
+      mockup: 'brand',
+      gallery: [],
+      video: '',
+      liveUrl: 'https://chkobba-pp6n.onrender.com',
+      githubUrl: '',
+      size: 'pc-2'
+    },
+    {
       title: 'Fast Food Festival',
       category: 'Graphic Design · Event Poster',
       type: 'design',
@@ -1601,38 +1827,7 @@ html, body{ max-width: 100%; overflow-x: hidden; }
       githubUrl: '',
       size: 'pc-2'
     },
-    {
-      title: 'Automotive — Cinematic',
-      category: 'Video Editing · Personal Project',
-      type: 'video',
-      hosting: 'case-study',
-      description: 'A cinematic automotive visual concept focused on motion, atmosphere and visual storytelling.',
-      contribution: [],
-      technologies: ['Video Editing', 'Color Grading', 'Motion'],
-      image: '',
-      mockup: 'video',
-      gallery: [],
-      video: '',
-      liveUrl: '',
-      githubUrl: '',
-      size: 'pc-3'
-    },
-    {
-      title: 'Mobile Experience',
-      category: 'Mobile Development · Concept',
-      type: 'mobile',
-      hosting: 'case-study',
-      description: 'A mobile application concept focused on clean interaction and practical user experience.',
-      contribution: [],
-      technologies: ['Android', 'Java', 'UI/UX'],
-      image: '',
-      mockup: 'phone',
-      gallery: [],
-      video: '',
-      liveUrl: '',
-      githubUrl: '',
-      size: 'pc-4'
-    },
+
     {
       title: 'Identity Study',
       category: 'Branding · Experimental Work',
@@ -1649,22 +1844,7 @@ html, body{ max-width: 100%; overflow-x: hidden; }
       githubUrl: '',
       size: 'pc-5'
     },
-    {
-      title: 'Digital Interface',
-      category: 'Web / UI Design · Concept',
-      type: 'web',
-      hosting: 'case-study',
-      description: 'A modern interface concept focused on clarity, hierarchy and interaction.',
-      contribution: [],
-      technologies: ['UI Design', 'Figma', 'Frontend'],
-      image: '',
-      mockup: 'ui',
-      gallery: [],
-      video: '',
-      liveUrl: '',
-      githubUrl: '',
-      size: 'pc-6'
-    },
+    
     {
       title: 'Forma Nova',
       category: 'Graphic Design · Branding',
@@ -1682,13 +1862,13 @@ html, body{ max-width: 100%; overflow-x: hidden; }
       size: 'pc-3'
     },
     {
-      title: 'Discord Server Kit',
+      title: 'Live Stream Kit',
       category: 'Graphic Design · Community Branding',
       type: 'design',
       hosting: 'case-study',
-      description: 'A themed set of banners and graphics for a Discord community, including server, subscribe and hardware-showcase banners.',
+      description: 'A themed set of banners, graphics and animated sticker packs for a Discord/live-streaming community, including server, subscribe and hardware-showcase banners.',
       contribution: [],
-      technologies: ['Branding', 'Social Graphics', 'Layout'],
+      technologies: ['Branding', 'Social Graphics', 'Layout', 'Stickers'],
       image: 'assets/images/graphic-design/discord-kit-1.png',
       mockup: 'poster',
       gallery: [
@@ -1699,7 +1879,44 @@ html, body{ max-width: 100%; overflow-x: hidden; }
         'assets/images/graphic-design/discord-kit-5.png',
         'assets/images/graphic-design/discord-kit-6.png',
         'assets/images/graphic-design/discord-kit-7.png',
-        'assets/images/graphic-design/discord-kit-8.png'
+        'assets/images/graphic-design/discord-kit-8.png',
+        'assets/images/graphic-design/hype-removebg-preview.png',
+        'assets/images/graphic-design/hi-removebg-preview.png',
+        'assets/images/graphic-design/gg-removebg-preview.png',
+        'assets/images/graphic-design/cool-removebg-preview.png',
+        'assets/images/graphic-design/nice-removebg-preview.png',
+        'assets/images/graphic-design/cheers-removebg-preview.png',
+        'assets/images/graphic-design/sip-removebg-preview.png',
+        'assets/images/graphic-design/love-removebg-preview.png',
+        'assets/images/graphic-design/thanks-removebg-preview.png',
+        'assets/images/graphic-design/rich-removebg-preview.png',
+        'assets/images/graphic-design/mindblow-removebg-preview.png',
+        'assets/images/graphic-design/salty-removebg-preview.png',
+        'assets/images/graphic-design/diss-removebg-preview.png',
+        'assets/images/graphic-design/cry-removebg-preview.png',
+        'assets/images/graphic-design/zzz-removebg-preview.png',
+        'assets/images/graphic-design/image_2026-07-30_192243961-removebg-preview.png'
+      ],
+      video: 'assets/images/graphic-design/offline.mp4',
+      liveUrl: '',
+      githubUrl: '',
+      size: 'pc-3'
+    },
+    {
+      title: 'Posters',
+      category: 'Graphic Design · Campaign Posters',
+      type: 'design',
+      hosting: 'case-study',
+      description: 'A "Sans Visa" destination poster campaign for Street & Fast Food Fest, inviting visitors to "travel" to France, Italy and Saudi Arabia through food, shown as print posters, a street-billboard mockup and a mural mockup.',
+      contribution: [],
+      technologies: ['Graphic Design', 'Campaign', 'Print', 'Mockup'],
+      image: 'assets/images/graphic-design/france.png',
+      mockup: 'poster',
+      gallery: [
+        'assets/images/graphic-design/france.png',
+        'assets/images/graphic-design/italy.png',
+        'assets/images/graphic-design/large-rectangle-billboard-mockup-with-structure-on-urban-pavement-background-01181.jpg',
+        'assets/images/graphic-design/scene_2026-08-14 (3).png'
       ],
       video: '',
       liveUrl: '',
@@ -1755,22 +1972,6 @@ html, body{ max-width: 100%; overflow-x: hidden; }
       size: 'pc-2'
     },
     {
-      title: 'Chkobba',
-      category: 'Web Development · Branding & Game',
-      type: 'web',
-      hosting: 'static',
-      description: 'A digital version of Chkobba, the traditional Tunisian card game, including its brand identity and logo design.',
-      contribution: [],
-      technologies: ['Branding', 'Logo Design', 'Web Development'],
-      image: 'assets/images/branding/chkobba.png',
-      mockup: 'brand',
-      gallery: [],
-      video: '',
-      liveUrl: 'https://chkobba-pp6n.onrender.com',
-      githubUrl: '',
-      size: 'pc-2'
-    },
-    {
       title: 'Fan Art Posters',
       category: 'Graphic Design · Fan Art',
       type: 'design',
@@ -1794,39 +1995,6 @@ html, body{ max-width: 100%; overflow-x: hidden; }
       size: 'pc-2'
     },
     {
-      title: 'Poster Collection',
-      category: 'Graphic Design · Poster Series',
-      type: 'design',
-      hosting: 'case-study',
-      description: 'A collection of promotional poster designs spanning multiple concepts and events.',
-      contribution: [],
-      technologies: ['Graphic Design', 'Print', 'Layout'],
-      image: '',
-      mockup: 'document',
-      gallery: [],
-      video: '',
-      pdf: 'assets/images/graphic-design/posters.pdf',
-      liveUrl: '',
-      githubUrl: '',
-      size: 'pc-2'
-    },
-    {
-      title: 'Offline',
-      category: 'Video Editing · Motion Graphics',
-      type: 'video',
-      hosting: 'case-study',
-      description: 'A short motion graphics / video edit exploring an "offline" visual concept.',
-      contribution: [],
-      technologies: ['Video Editing', 'Motion Graphics'],
-      image: '',
-      mockup: 'video',
-      gallery: [],
-      video: 'assets/images/graphic-design/offline.mp4',
-      liveUrl: '',
-      githubUrl: '',
-      size: 'pc-3'
-    },
-    {
       title: 'Ramadan Mubarak',
       category: 'Video Editing · Social Content',
       type: 'video',
@@ -1841,42 +2009,6 @@ html, body{ max-width: 100%; overflow-x: hidden; }
       liveUrl: '',
       githubUrl: '',
       size: 'pc-3'
-    },
-    {
-      title: 'Street & Fast Food Fest',
-      category: 'Web Development · Event Website',
-      type: 'web',
-      hosting: 'static',
-      description: 'The official event website for Street & Fast Food Fest, a food festival hosted by the Tunisian Global Village at Les Berges du Lac. Also designed the event\'s diplomatic partnership dossier and official sponsorship guide.',
-      contribution: [],
-      technologies: ['Web Development', 'Event Site', 'Document Design'],
-      image: 'assets/images/thumbnails/sfff.webp',
-      mockup: 'ui',
-      gallery: [],
-      video: '',
-      documents: [
-        { label: 'Diplomatic Partnership Dossier (PDF)', href: 'assets/documents/SFFF20_3 EN.PDF_compressed.pdf' },
-        { label: 'Sponsorship Guide (PDF)', href: 'assets/documents/SFFF ANGLAIS finale.PDF_compressed.pdf' }
-      ],
-      liveUrl: 'https://globalvillagetunisia.com',
-      githubUrl: '',
-      size: 'pc-3'
-    },
-    {
-      title: 'Street & Fast Food Fest — App',
-      category: 'Mobile Development · Event Companion App',
-      type: 'mobile',
-      hosting: 'static',
-      description: 'A mobile companion experience for Street & Fast Food Fest attendees, including the festival passport, schedule and cashless wallet.',
-      contribution: [],
-      technologies: ['Mobile Development', 'UI/UX'],
-      image: '',
-      mockup: 'phone',
-      gallery: [],
-      video: '',
-      liveUrl: 'https://fastfoodfestival.com',
-      githubUrl: '',
-      size: 'pc-2'
     },
     {
       title: 'Mafia Store',
@@ -1993,24 +2125,37 @@ html, body{ max-width: 100%; overflow-x: hidden; }
      RENDER PROJECT GRID
   ========================================================= */
   var projectGrid = document.getElementById('projectGrid');
+  var featuredGrid = document.getElementById('featuredGrid');
+  var featuredWorkSection = document.querySelector('.featured-work');
+
+  function cardMarkup(project, index){
+    var visual = project.image
+      ? '<img src="' + escapeHtml(project.image) + '" alt="' + escapeHtml(project.title) + '" loading="lazy">'
+      : (mockupTemplates[project.mockup] || '');
+
+    return '<article class="project-card ' + project.size + ' reveal" data-cat="' + project.type + '" data-featured="' + (project.featured ? 'true' : 'false') + '" data-index="' + index + '" tabindex="0" role="button" aria-haspopup="dialog">'
+      + '<div class="project-visual">' + visual
+      + '<div class="project-overlay"><span class="project-view-btn">' + ctaLabelFor(project) + '</span></div>'
+      + '</div>'
+      + '<div class="project-info">'
+      + '<span class="project-cat">' + escapeHtml(project.category) + '</span>'
+      + '<h3 class="project-title">' + escapeHtml(project.title) + '</h3>'
+      + '<p class="project-desc">' + escapeHtml(project.description) + '</p>'
+      + '<div class="project-tags">' + project.technologies.map(function(t){ return '<span class="tag">' + escapeHtml(t) + '</span>'; }).join('') + '</div>'
+      + '</div></article>';
+  }
 
   function renderProjects(){
-    projectGrid.innerHTML = projects.map(function(project, index){
-      var visual = project.image
-        ? '<img src="' + escapeHtml(project.image) + '" alt="' + escapeHtml(project.title) + '" loading="lazy">'
-        : (mockupTemplates[project.mockup] || '');
+    projectGrid.innerHTML = projects.map(cardMarkup).join('');
 
-      return '<article class="project-card ' + project.size + ' reveal" data-cat="' + project.type + '" data-index="' + index + '" tabindex="0" role="button" aria-haspopup="dialog">'
-        + '<div class="project-visual">' + visual
-        + '<div class="project-overlay"><span class="project-view-btn">' + ctaLabelFor(project) + '</span></div>'
-        + '</div>'
-        + '<div class="project-info">'
-        + '<span class="project-cat">' + escapeHtml(project.category) + '</span>'
-        + '<h3 class="project-title">' + escapeHtml(project.title) + '</h3>'
-        + '<p class="project-desc">' + escapeHtml(project.description) + '</p>'
-        + '<div class="project-tags">' + project.technologies.map(function(t){ return '<span class="tag">' + escapeHtml(t) + '</span>'; }).join('') + '</div>'
-        + '</div></article>';
-    }).join('');
+    var featuredProjects = projects.map(function(p, i){ return { project: p, index: i }; })
+      .filter(function(entry){ return entry.project.featured; });
+
+    if(featuredProjects.length && featuredGrid){
+      featuredGrid.innerHTML = featuredProjects.map(function(entry){ return cardMarkup(entry.project, entry.index); }).join('');
+    } else if(featuredWorkSection){
+      featuredWorkSection.style.display = 'none';
+    }
   }
 
   function handleCardActivate(card){
@@ -2178,7 +2323,7 @@ html, body{ max-width: 100%; overflow-x: hidden; }
      PROJECT FILTERING
   ========================================================= */
   var filterBtns = document.querySelectorAll('.filter-btn');
-  var projectCards = document.querySelectorAll('.project-card');
+  var projectCards = projectGrid.querySelectorAll('.project-card');
 
   filterBtns.forEach(function(btn){
     btn.addEventListener('click', function(){
@@ -2190,7 +2335,8 @@ html, body{ max-width: 100%; overflow-x: hidden; }
 
       projectCards.forEach(function(card){
         var cat = card.getAttribute('data-cat');
-        var show = (filter === 'all' || cat === filter);
+        var show = (filter === 'all')
+          || (filter === 'client' ? card.getAttribute('data-featured') === 'true' : cat === filter);
 
         if(show){
           card.classList.remove('hide');
@@ -2213,7 +2359,7 @@ html, body{ max-width: 100%; overflow-x: hidden; }
   /* =========================================================
      PROJECT CARD ACTIVATION (click / keyboard)
   ========================================================= */
-  projectCards.forEach(function(card){
+  document.querySelectorAll('.project-card').forEach(function(card){
     card.addEventListener('click', function(){ handleCardActivate(card); });
     card.addEventListener('keydown', function(e){
       if(e.key === 'Enter' || e.key === ' '){
@@ -2278,6 +2424,116 @@ html, body{ max-width: 100%; overflow-x: hidden; }
   window.addEventListener('resize', function(){
     if(window.innerWidth > 1024){ closeMenu(); }
   });
+
+  /* =========================================================
+     HERO HEADLINE GLITCH SWAP
+     Click/hover the headline to glitch-swap between the two
+     .swap-layer blocks inside #heroSwap, with an RGB-split
+     canvas burst (rendered by drawGlitchBurst) over the top.
+  ========================================================= */
+  (function(){
+    var swapBtn = document.getElementById('heroSwap');
+    if(!swapBtn) return;
+
+    var canvas = document.getElementById('heroSwapCanvas');
+    var primaryLayer = swapBtn.querySelector('.swap-layer.primary');
+    var altLayer = swapBtn.querySelector('.swap-layer.alt');
+    var ctx = canvas.getContext('2d');
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var showingAlt = false;
+    var rafId = null;
+    var swapTimeout = null;
+    var autoTimer = null;
+    var burstStart = 0;
+    var BURST_MS = 320;
+
+    function resizeCanvas(){
+      var rect = swapBtn.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      canvas.style.width = rect.width + 'px';
+      canvas.style.height = rect.height + 'px';
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    function drawGlitchBurst(now){
+      var elapsed = now - burstStart;
+      var t = Math.min(elapsed / BURST_MS, 1);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      if(t < 1){
+        var intensity = 1 - t;
+        var sliceCount = 22;
+        var sliceH = canvas.height / sliceCount;
+        var channels = [
+          { color: 'rgba(221,224,63,0.55)' },
+          { color: 'rgba(16,64,32,0.6)' },
+          { color: 'rgba(120,180,50,0.45)' }
+        ];
+
+        for(var i = 0; i < sliceCount; i++){
+          var y = i * sliceH;
+          var jitter = (Math.random() - 0.5) * 36 * intensity;
+
+          for(var c = 0; c < channels.length; c++){
+            var offset = jitter + (c - 1) * 5 * intensity;
+            ctx.fillStyle = channels[c].color;
+            ctx.fillRect(offset, y, canvas.width, sliceH);
+          }
+
+          if(Math.random() < 0.1 * intensity){
+            ctx.fillStyle = 'rgba(6,18,10,0.85)';
+            ctx.fillRect((Math.random() - 0.5) * 50, y, canvas.width, sliceH * 0.6);
+          }
+        }
+
+        rafId = requestAnimationFrame(drawGlitchBurst);
+      } else {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+    }
+
+    function fireBurst(){
+      if(reducedMotion) return;
+      burstStart = performance.now();
+      if(rafId) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(drawGlitchBurst);
+    }
+
+    function toggle(){
+      fireBurst();
+      if(swapTimeout) clearTimeout(swapTimeout);
+      var doSwap = function(){
+        showingAlt = !showingAlt;
+        primaryLayer.style.transition = 'opacity 180ms ease';
+        altLayer.style.transition = 'opacity 180ms ease';
+        primaryLayer.style.opacity = showingAlt ? '0' : '1';
+        altLayer.style.opacity = showingAlt ? '1' : '0';
+        altLayer.setAttribute('aria-hidden', showingAlt ? 'false' : 'true');
+        primaryLayer.setAttribute('aria-hidden', showingAlt ? 'true' : 'false');
+      };
+      swapTimeout = setTimeout(doSwap, reducedMotion ? 0 : 140);
+    }
+
+    swapBtn.addEventListener('click', toggle);
+    swapBtn.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' || e.key === ' '){
+        e.preventDefault();
+        toggle();
+      }
+    });
+
+    if(!reducedMotion){
+      var isHovering = false;
+      swapBtn.addEventListener('mouseenter', function(){ isHovering = true; });
+      swapBtn.addEventListener('mouseleave', function(){ isHovering = false; });
+
+      autoTimer = setInterval(function(){
+        if(!isHovering) toggle();
+      }, 4200);
+    }
+  })();
 
 })();
 </script>
