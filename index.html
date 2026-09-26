@@ -661,26 +661,153 @@ button:focus-visible,
   margin-top: 22px;
 }
 
-.featured-work-label{
-  font-family: var(--font-body);
-  font-size: 12.5px;
+.work-intro{
+  max-width: 520px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.work-subhead{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap: 20px;
+  flex-wrap:wrap;
+  margin-top: 72px;
+  margin-bottom: 40px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--line);
+}
+.work-subhead h3{ font-size: 1.3rem; font-weight: 500; }
+.work-subhead p{ color: var(--muted-dim); font-size: 0.85rem; letter-spacing: 0.04em; }
+
+/* Media box: blurred backdrop + fitted image, so any aspect ratio looks intentional */
+.media{
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: radial-gradient(120% 100% at 20% 0%, #161616 0%, #0c0c0c 60%);
+}
+.media-bg{
+  position:absolute;
+  inset:-24px;
+  width: calc(100% + 48px);
+  height: calc(100% + 48px);
+  object-fit:cover;
+  filter: blur(26px) brightness(0.42) saturate(1.2);
+  pointer-events:none;
+}
+.media-img{
+  position:relative;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  padding: 6%;
+  transition: transform 600ms var(--ease);
+}
+.media.is-cover .media-img{ object-fit:cover; padding:0; }
+.media.is-cover .media-bg{ display:none; }
+.media video.media-img{ object-fit:cover; padding:0; }
+.media-play{
+  position:absolute;
+  top:50%; left:50%;
+  width:56px; height:56px;
+  margin:-28px 0 0 -28px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color: var(--accent);
+  border: 1.5px solid var(--accent);
+  background: rgba(8,8,8,0.55);
+  backdrop-filter: blur(4px);
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.work-card:hover .media-play{ background: var(--accent); color:#080808; }
+
+/* Featured case studies */
+.cs-list{ display:flex; flex-direction:column; gap: clamp(72px, 9vw, 120px); }
+.cs-row{
+  display:grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: clamp(32px, 5vw, 72px);
+  align-items:center;
+}
+.cs-row:nth-child(even){ grid-template-columns: 1fr 1.2fr; }
+.cs-row:nth-child(even) .cs-visual{ order:2; }
+.cs-visual{
+  display:block;
+  width:100%;
+  padding:0;
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+  overflow:hidden;
+  background: var(--surface);
+  color: inherit;
+  font: inherit;
+  text-align:left;
+  cursor:pointer;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.35);
+  transition: transform var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+.cs-visual:hover,
+.cs-visual:focus-visible{ transform: translateY(-6px); border-color: var(--accent); }
+.cs-visual:hover .media-img{ transform: scale(1.03); }
+.cs-chrome{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  padding: 11px 14px;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--line);
+}
+.cs-chrome i{ width:9px; height:9px; border-radius:50%; background: var(--line-strong); }
+.cs-chrome span{
+  margin-left: 10px;
+  font-size: 11.5px;
+  color: var(--muted-dim);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.cs-visual .media{ aspect-ratio: 16 / 10; }
+
+.cs-index{
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  color: var(--muted-dim);
+}
+.cs-cat{
+  display:block;
+  margin-top: 14px;
+  font-size: 11.5px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--text);
-  font-weight: 600;
-  margin-top: 40px;
-  margin-bottom: 20px;
+  color: var(--accent);
+  font-weight: 700;
 }
-.featured-grid{ margin-bottom: 8px; }
-
-.all-work-head{ margin-top: 88px; }
+.cs-title{ font-size: clamp(1.8rem, 3.2vw, 2.6rem); font-weight: 500; margin-top: 10px; }
+.cs-summary{ color: var(--muted); line-height: 1.7; margin-top: 16px; }
+.cs-highlights{ list-style:none; margin: 22px 0 0; padding:0; display:flex; flex-direction:column; gap: 10px; }
+.cs-highlights li{ position:relative; padding-left: 24px; font-size: 0.95rem; line-height: 1.5; }
+.cs-highlights li::before{
+  content:'';
+  position:absolute;
+  left:0; top: 0.72em;
+  width: 12px; height: 1px;
+  background: var(--accent);
+}
+.cs-tags{ display:flex; flex-wrap:wrap; gap:8px; margin-top: 24px; }
+.cs-actions{ display:flex; gap: 12px; flex-wrap:wrap; margin-top: 30px; }
 
 .filters{
   display:flex;
   gap: 10px;
   flex-wrap:wrap;
-  margin-top: 20px;
-  margin-bottom: 40px;
+  margin-bottom: 36px;
 }
 .filter-btn{
   font-family: var(--font-body);
@@ -701,101 +828,102 @@ button:focus-visible,
   border-color: var(--accent);
   color:#080808;
 }
+.filter-btn .count{ margin-left: 6px; opacity: 0.55; font-weight: 500; }
 
-.project-grid{
+/* More work grid */
+.work-grid{
   display:grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 24px;
 }
-.project-card{
+.work-card{
   position:relative;
-  border-radius: 6px;
-  overflow:hidden;
-  border: 1px solid var(--line);
-  background: var(--surface);
-  cursor:pointer;
-  transition: transform var(--dur) var(--ease), border-color var(--dur) var(--ease), opacity 400ms var(--ease);
   display:flex;
   flex-direction:column;
-}
-.project-card:hover{ transform: translateY(-6px); border-color: var(--line-strong); }
-.project-card.hide{ display:none; }
-
-.pc-1{ grid-column: span 4; }
-.pc-2{ grid-column: span 2; }
-.pc-3{ grid-column: span 3; }
-.pc-4{ grid-column: span 3; }
-.pc-5{ grid-column: span 2; }
-.pc-6{ grid-column: span 4; }
-
-.project-visual{
-  position:relative;
-  height: 300px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
   overflow:hidden;
-  background:
-    radial-gradient(120% 100% at 20% 0%, #161616 0%, #0c0c0c 60%);
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  background: var(--surface);
+  cursor:pointer;
+  transition: transform var(--dur) var(--ease), border-color var(--dur) var(--ease);
 }
-.project-visual > *{ transition: transform 600ms var(--ease); }
-.project-card:hover .project-visual > *{ transform: scale(1.04); }
+.work-card:hover,
+.work-card:focus-visible{ transform: translateY(-6px); border-color: var(--line-strong); }
+.work-card.hide{ display:none; }
+.work-card .media{ aspect-ratio: 4 / 3; }
+.work-card:hover .media-img{ transform: scale(1.04); }
 
-.project-overlay{
-  position:absolute; inset:0;
-  background: linear-gradient(180deg, transparent 40%, rgba(8,8,8,0.75) 100%);
-  opacity:0;
-  transition: opacity var(--dur) var(--ease);
+.card-badges{
+  position:absolute;
+  top:12px; left:12px; right:12px;
   display:flex;
-  align-items:flex-end;
-  padding: 20px;
+  justify-content:space-between;
+  gap:8px;
+  z-index:2;
+  pointer-events:none;
 }
-.project-card:hover .project-overlay{ opacity:1; }
-.project-view-btn{
-  font-size: 12.5px;
-  font-weight: 600;
-  color: #080808;
-  background: var(--accent);
-  padding: 10px 16px;
+.badge{
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 5px 10px;
   border-radius: 100px;
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  transform: translateY(8px);
-  opacity:0;
-  transition: all var(--dur) var(--ease) 60ms;
+  background: rgba(8,8,8,0.72);
+  border: 1px solid var(--line-strong);
+  backdrop-filter: blur(6px);
+  color: var(--text);
 }
-.project-card:hover .project-view-btn{ transform: translateY(0); opacity:1; }
 
-.project-info{
-  padding: 26px 26px 30px;
+.work-card-body{
+  padding: 20px 22px 24px;
   border-top: 1px solid var(--line);
   display:flex;
   flex-direction:column;
-  gap: 10px;
+  gap: 8px;
   flex:1;
 }
-.project-cat{
-  font-size: 11.5px;
+.work-card-cat{
+  font-size: 11px;
   letter-spacing: 0.14em;
-  text-transform:uppercase;
+  text-transform: uppercase;
   color: var(--accent);
   font-weight: 700;
 }
-.project-title{
-  font-size: 1.5rem;
+.work-card-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 12px;
+  font-size: 1.2rem;
   font-weight: 500;
 }
-.project-desc{
-  color: var(--muted);
-  font-size: 0.92rem;
-  line-height:1.55;
+.work-card-go{
+  flex-shrink:0;
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-size: 13px;
+  transition: background var(--dur) var(--ease), border-color var(--dur) var(--ease), color var(--dur) var(--ease), transform var(--dur) var(--ease);
 }
-.project-tags{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  margin-top: 6px;
+.work-card:hover .work-card-go{
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #080808;
+  transform: rotate(45deg);
+}
+.work-card-summary{
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.55;
+  display:-webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow:hidden;
 }
 .tag{
   font-size: 11px;
@@ -852,6 +980,14 @@ button:focus-visible,
   transition: background var(--dur) var(--ease), border-color var(--dur) var(--ease), transform var(--dur) var(--ease);
 }
 .modal-close:hover{ border-color: var(--accent); color: var(--accent); transform: rotate(90deg); }
+.modal-close{ z-index: 3; }
+
+.modal-hero{
+  margin: -48px -48px 32px;
+  aspect-ratio: 16 / 9;
+  border-bottom: 1px solid var(--line);
+}
+.modal-hero video{ width:100%; height:100%; object-fit:contain; background:#000; }
 
 .modal-cat{
   font-size: 11.5px;
@@ -959,9 +1095,8 @@ button:focus-visible,
 .modal-video{ margin-top: 12px; }
 .modal-video video{ width:100%; border-radius: 8px; border: 1px solid var(--line); background:#000; }
 
-.modal-thumb{ width:100%; border-radius: 8px; border: 1px solid var(--line); margin-top: 12px; }
 
-.modal-actions{ display:flex; gap:14px; flex-wrap:wrap; margin-top: 34px; }
+.modal-actions{ display:flex; gap:14px; flex-wrap:wrap; margin-top: 26px; }
 
 .modal-note{
   margin-top: 30px;
@@ -972,6 +1107,7 @@ button:focus-visible,
 
 @media (max-width: 768px){
   .modal-panel{ padding: 32px 24px; }
+  .modal-hero{ margin: -32px -24px 26px; }
 }
 
 /* Project 1 - dashboard mockup */
@@ -995,9 +1131,9 @@ button:focus-visible,
 .mock-video{ width:100%; height:100%; position:relative; background: linear-gradient(160deg,#161616,#050505); display:flex; align-items:center; justify-content:center; }
 .mock-video::before{ content:''; position:absolute; inset:0; background-image: repeating-linear-gradient(0deg, rgba(245,245,245,0.02) 0 1px, transparent 1px 3px); }
 .play-btn{ width:70px; height:70px; border-radius:50%; border:1.5px solid var(--accent); display:flex; align-items:center; justify-content:center; z-index:2; transition: background var(--dur) var(--ease); }
-.project-card:hover .play-btn{ background: var(--accent); }
+.work-card:hover .play-btn{ background: var(--accent); }
 .play-btn svg{ transition: fill var(--dur) var(--ease); }
-.project-card:hover .play-btn svg{ fill:#080808; }
+.work-card:hover .play-btn svg{ fill:#080808; }
 .mock-video .vig{ position:absolute; inset:0; box-shadow: inset 0 0 90px 20px rgba(0,0,0,0.7); }
 .mock-video .timecode{ position:absolute; bottom:14px; left:14px; font-size:10px; color: var(--muted); letter-spacing:0.1em; }
 
@@ -1283,8 +1419,10 @@ button:focus-visible,
   .nav-right .nav-cta{ display:none; }
   .hamburger{ display:flex; }
 
-  .project-grid{ grid-template-columns: repeat(2,1fr); }
-  .pc-1,.pc-2,.pc-3,.pc-4,.pc-5,.pc-6{ grid-column: span 1; }
+  .work-grid{ grid-template-columns: repeat(2,1fr); }
+  .cs-row,
+  .cs-row:nth-child(even){ grid-template-columns: 1fr; }
+  .cs-row:nth-child(even) .cs-visual{ order:0; }
 
   .featured{ grid-template-columns: 1fr; }
   .featured-visual{ height: 360px; margin-top: 20px; }
@@ -1306,7 +1444,7 @@ button:focus-visible,
   .service-arrow{ display:none; }
   .hero-coords{ display:none; }
   .hero-decor{ width: 220px; height:220px; top:6%; right:0; opacity:0.4; }
-  .project-visual{ height: 240px; }
+  .work-grid{ grid-template-columns: 1fr; }
   .mock-phone{ width: 120px; }
 }
 
@@ -1546,27 +1684,21 @@ html, body{ max-width: 100%; overflow-x: hidden; }
         <p class="eyebrow reveal">03 — Selected Work</p>
         <h2 class="work-headline reveal" id="work-heading">A selection of things I've made.</h2>
       </div>
+      <p class="work-intro reveal">Real client work first: websites and apps that are live today. Below that, design, branding and video pieces you can filter by discipline.</p>
     </div>
 
-    <div class="featured-work">
-      <p class="featured-work-label reveal">Client &amp; Professional Work</p>
-      <div class="project-grid featured-grid" id="featuredGrid"></div>
+    <div class="work-subhead reveal">
+      <h3>Featured case studies</h3>
+      <p id="featuredCount"></p>
     </div>
+    <div class="cs-list" id="featuredList"></div>
 
-    <div class="all-work-head">
-      <p class="eyebrow reveal">All Work</p>
+    <div class="work-subhead reveal">
+      <h3>More work</h3>
+      <p id="archiveCount"></p>
     </div>
-
-    <div class="filters" role="tablist" aria-label="Filter projects">
-      <button class="filter-btn active" data-filter="all" role="tab" aria-selected="true">All</button>
-      <button class="filter-btn" data-filter="client" role="tab" aria-selected="false">Client Work</button>
-      <button class="filter-btn" data-filter="design" role="tab" aria-selected="false">Design</button>
-      <button class="filter-btn" data-filter="video" role="tab" aria-selected="false">Video</button>
-      <button class="filter-btn" data-filter="web" role="tab" aria-selected="false">Web</button>
-      <button class="filter-btn" data-filter="mobile" role="tab" aria-selected="false">Mobile</button>
-    </div>
-
-    <div class="project-grid" id="projectGrid"></div>
+    <div class="filters" id="workFilters" role="tablist" aria-label="Filter projects"></div>
+    <div class="work-grid" id="workGrid"></div>
   </div>
 </section>
 
@@ -1781,27 +1913,26 @@ html, body{ max-width: 100%; overflow-x: hidden; }
 
      Fields:
        title         string
-       category      string, shown as the small eyebrow label
-       type          'design' | 'video' | 'web' | 'mobile' (drives the filter)
-       hosting       'static'      -> has a real GitHub Pages / external liveUrl, opens in a new tab
-                     'case-study'  -> no live hosting, opens the modal with description/contribution/tech
-                     'github-only' -> opens githubUrl directly, no live demo
-       description   string, used in the modal
-       contribution  array of strings (optional), "My Contribution" bullets in the modal
+       category      string, "Discipline · Kind" (e.g. 'Web Development · Restaurant Website')
+       type          'design' | 'video' | 'web' | 'mobile' (drives the filters and the card badge)
+       featured      true (optional) -> shown as a large "Featured case study" row instead of a grid card.
+                     Reserve this for real client/professional work.
+       summary       one short sentence, shown on cards and case-study rows
+       highlights    array of 3 short phrases (featured projects), shown as bullets on the row
+       description   full text, shown in the project modal
+       contribution  array of strings (optional), "My contribution" bullets in the modal
        technologies  array of strings, shown as tag pills
-       image         path to a real thumbnail (optional). Falls back to the CSS mockup below if empty.
-       mockup        one of 'dashboard' | 'poster' | 'video' | 'phone' | 'brand' | 'ui' — used only when image is empty
-       gallery       array of image paths (optional), shown in the modal for design/case-study projects
-       video         path to a video file (optional), shown as a native player in the modal
-       liveUrl       real external/GitHub Pages URL (optional, only for hosting:'static')
-       githubUrl     real GitHub repo URL (optional)
-       size          grid span class: 'pc-1'/'pc-6' = span 4, 'pc-2'/'pc-5' = span 2, 'pc-3'/'pc-4' = span 3
-       featured      true (optional) -> also shown in the "Featured Work" row above the full grid.
-                     Reserve this for real client/professional work, not demos or design practice.
+       image         thumbnail path (optional). Any shape works: wide screenshots fill the frame,
+                     logos and posters are fitted over a blurred backdrop.
+       mockup        'dashboard' | 'poster' | 'video' | 'phone' | 'brand' | 'ui' | 'document',
+                     CSS placeholder used only when there is no image and no video
+       gallery       array of image paths (optional); 2+ images show as thumbnails with a lightbox
+       video         path to a video file (optional)
+       liveUrl       live site URL (optional), shown as a "Visit live site" button
+       githubUrl     GitHub repo URL (optional)
+       pdf / documents  optional PDF links shown as buttons in the modal
 
-     Order matters for the "All" filter view: real client/professional work is listed first,
-     then practice/demo sites, then pure design & video pieces. Add new real client work near
-     the top of the array, and mark it featured: true if it's one of your best 3-4 pieces.
+     Every project opens its modal when clicked. Order in the array = order on the page.
   ========================================================= */
   var projects = [
     /* ---- Real client / professional work (shown first, best pieces featured) ---- */
@@ -1809,9 +1940,10 @@ html, body{ max-width: 100%; overflow-x: hidden; }
       title: 'COMCOM Group International',
       category: 'Web Development · Corporate Website',
       type: 'web',
-      hosting: 'static',
       featured: true,
       description: 'A full corporate website designed and built for COMCOM Group International, a Delaware-registered global media, live-events and entertainment holding company operating across the USA, UAE, Tunisia and Saudi Arabia. Premium, editorial visual design with heavy motion and full multi-language support, positioned as a single-page investor-and-portfolio site for a multi-market entertainment conglomerate.',
+      summary: 'Corporate site for a global media and live-events holding company across the USA, UAE, Tunisia and Saudi Arabia, in English, French and Arabic.',
+      highlights: ['English, French and Arabic with full RTL layout', 'Custom motion system: scroll reveals, kinetic headline, particles', 'WebP imagery, lazy-loading, SEO metadata and security headers'],
       contribution: [
         'The Challenge: present a multi-market, multi-language holding company — spanning media, live events and entertainment across four countries — as one coherent, high-production-value brand, without the site collapsing under its own motion and interaction budget.',
         'Built a dark, editorial visual system with a custom motion engine: scroll-reveal animations, a kinetic animated headline with rotating text, and sparkle/particle effects.',
@@ -1828,16 +1960,16 @@ html, body{ max-width: 100%; overflow-x: hidden; }
       gallery: [],
       video: '',
       liveUrl: 'https://comcomgroupcompany.com',
-      githubUrl: '',
-      size: 'pc-3'
+      githubUrl: ''
     },
     {
       title: 'Tagine Beverly Hills',
       category: 'Web Development · Restaurant Website',
       type: 'web',
-      hosting: 'static',
       featured: true,
       description: 'A restaurant website for Tagine, an intimate 35-seat Moroccan fine-dining spot on Robertson Boulevard in Beverly Hills, California. Dark, candlelit visual design that mirrors the restaurant\'s own atmosphere, built around reservations, menus and the story behind the space.',
+      summary: 'Website for an intimate 35-seat Moroccan fine-dining restaurant on Robertson Boulevard, Beverly Hills.',
+      highlights: ['Multi-step table reservation flow with a live summary', 'Gift card page with selectable values and a live card preview', 'Candlelit visual design that mirrors the dining room'],
       contribution: [
         'Designed a moody, cinematic homepage built around a full-bleed candlelit dining photo, matching the restaurant\'s own in-room atmosphere rather than a generic bright food-site look.',
         'Built clear, high-intent navigation (Menu, Our Story, Private Events, Gift Cards, Contact) with reservations as the single, unmissable primary action.',
@@ -1858,16 +1990,16 @@ html, body{ max-width: 100%; overflow-x: hidden; }
       ],
       video: '',
       liveUrl: 'https://www.taginebeverlyhills.com',
-      githubUrl: '',
-      size: 'pc-3'
+      githubUrl: ''
     },
     {
       title: 'Street & Fast Food Fest',
       category: 'Web Development · Event Website',
       type: 'web',
-      hosting: 'static',
       featured: true,
       description: 'The official event website for Street & Fast Food Fest, a food festival hosted by the Tunisian Global Village at Les Berges du Lac. Also designed the event\'s diplomatic partnership dossier and official sponsorship guide.',
+      summary: 'Official website for Street & Fast Food Fest, a Tunisian Global Village food festival at Les Berges du Lac.',
+      highlights: ['Official event website', 'Diplomatic partnership dossier', 'Official sponsorship guide'],
       contribution: [],
       technologies: ['Web Development', 'Event Site', 'Document Design'],
       image: 'assets/images/thumbnails/sfff.webp',
@@ -1879,16 +2011,16 @@ html, body{ max-width: 100%; overflow-x: hidden; }
         { label: 'Sponsorship Guide (PDF)', href: 'assets/documents/SFFF ANGLAIS finale.PDF_compressed.pdf' }
       ],
       liveUrl: 'https://globalvillagetunisia.com',
-      githubUrl: '',
-      size: 'pc-3'
+      githubUrl: ''
     },
     {
       title: 'Street & Fast Food Fest — App',
       category: 'Mobile Development · Event Companion App',
       type: 'mobile',
-      hosting: 'static',
       featured: true,
       description: 'A mobile companion experience for Street & Fast Food Fest attendees, including the festival passport, schedule and cashless wallet.',
+      summary: 'Companion app for festival attendees, with a digital passport, schedule and cashless wallet.',
+      highlights: ['Digital festival passport', 'Event schedule', 'Cashless wallet'],
       contribution: [],
       technologies: ['Mobile Development', 'UI/UX'],
       image: 'assets/images/web/sfff/app.png',
@@ -1896,16 +2028,16 @@ html, body{ max-width: 100%; overflow-x: hidden; }
       gallery: [],
       video: '',
       liveUrl: 'https://fastfoodfestival.com',
-      githubUrl: '',
-      size: 'pc-2'
+      githubUrl: ''
     },
     {
       title: 'Athleo',
       category: 'Web Development · University Project',
       type: 'web',
-      hosting: 'case-study',
       featured: true,
       description: 'A football management platform connecting players, doctors, managers and fans, with performance tracking, medical status and an admin dashboard.',
+      summary: 'Football management platform connecting players, doctors, managers and fans.',
+      highlights: ['Player performance tracking', 'Medical status follow-up', 'Admin dashboard'],
       contribution: [],
       technologies: ['PHP', 'Symfony', 'MySQL', 'JavaScript'],
       image: 'assets/images/web/athleo/athleo-01.jpg',
@@ -1936,15 +2068,14 @@ html, body{ max-width: 100%; overflow-x: hidden; }
       ],
       video: 'assets/videos/athleoad.mp4',
       liveUrl: '',
-      githubUrl: '',
-      size: 'pc-1'
+      githubUrl: ''
     },
     {
       title: 'Chkobba',
       category: 'Web Development · Branding & Game',
       type: 'web',
-      hosting: 'static',
       description: 'A digital version of Chkobba, the traditional Tunisian card game, including its brand identity and logo design.',
+      summary: 'Digital version of the traditional Tunisian card game, with its own brand identity.',
       contribution: [],
       technologies: ['Branding', 'Logo Design', 'Web Development'],
       image: 'assets/images/branding/chkobba.png',
@@ -1952,15 +2083,14 @@ html, body{ max-width: 100%; overflow-x: hidden; }
       gallery: [],
       video: '',
       liveUrl: 'https://chkobba-pp6n.onrender.com',
-      githubUrl: '',
-      size: 'pc-2'
+      githubUrl: ''
     },
     {
       title: 'Fast Food Festival',
       category: 'Graphic Design · Event Poster',
       type: 'design',
-      hosting: 'case-study',
       description: 'Visual communication and promotional poster design for Street & Fast Food Fest, a Tunisian Global Village event.',
+      summary: 'Promotional poster design for Street & Fast Food Fest.',
       contribution: [],
       technologies: ['Branding', 'Print', 'Layout', 'Graphic Design'],
       image: 'assets/images/graphic-design/sfffposter.png',
@@ -1968,16 +2098,15 @@ html, body{ max-width: 100%; overflow-x: hidden; }
       gallery: [],
       video: '',
       liveUrl: '',
-      githubUrl: '',
-      size: 'pc-2'
+      githubUrl: ''
     },
 
     {
       title: 'Identity Study',
       category: 'Branding · Experimental Work',
       type: 'design',
-      hosting: 'case-study',
       description: 'An experimental visual identity exploring typography, composition and modern branding.',
+      summary: 'Experimental visual identity exploring typography and composition.',
       contribution: [],
       technologies: ['Branding', 'Typography', 'Art Direction'],
       image: '',
@@ -1985,16 +2114,15 @@ html, body{ max-width: 100%; overflow-x: hidden; }
       gallery: [],
       video: '',
       liveUrl: '',
-      githubUrl: '',
-      size: 'pc-5'
+      githubUrl: ''
     },
     
     {
       title: 'Forma Nova',
       category: 'Graphic Design · Branding',
       type: 'design',
-      hosting: 'case-study',
       description: 'Visual identity and brand presentation design for Forma Nova, covering logo, colors and business-card layout.',
+      summary: 'Logo, colors and business-card layout for Forma Nova.',
       contribution: [],
       technologies: ['Branding', 'Logo Design', 'Layout'],
       image: 'assets/images/graphic-design/forma-nova-1.png',
@@ -2002,18 +2130,17 @@ html, body{ max-width: 100%; overflow-x: hidden; }
       gallery: ['assets/images/graphic-design/forma-nova-1.png', 'assets/images/graphic-design/forma-nova-2.png'],
       video: '',
       liveUrl: '',
-      githubUrl: '',
-      size: 'pc-3'
+      githubUrl: ''
     },
     {
       title: 'Live Stream Kit',
       category: 'Graphic Design · Community Branding',
       type: 'design',
-      hosting: 'case-study',
       description: 'A themed set of banners, graphics and animated sticker packs for a Discord/live-streaming community, including server, subscribe and hardware-showcase banners.',
+      summary: 'Banners and a 16-sticker emote pack for a Discord and live-streaming community.',
       contribution: [],
       technologies: ['Branding', 'Social Graphics', 'Layout', 'Stickers'],
-      image: 'assets/images/graphic-design/discord-kit-1.png',
+      image: 'assets/images/graphic-design/hype-removebg-preview.png',
       mockup: 'poster',
       gallery: [
         'assets/images/graphic-design/discord-kit-1.png',
@@ -2043,15 +2170,14 @@ html, body{ max-width: 100%; overflow-x: hidden; }
       ],
       video: 'assets/images/graphic-design/offline.mp4',
       liveUrl: '',
-      githubUrl: '',
-      size: 'pc-3'
+      githubUrl: ''
     },
     {
       title: 'Posters',
       category: 'Graphic Design · Campaign Posters',
       type: 'design',
-      hosting: 'case-study',
       description: 'A "Sans Visa" destination poster campaign for Street & Fast Food Fest, inviting visitors to "travel" to France, Italy and Saudi Arabia through food, shown as print posters, a street-billboard mockup and a mural mockup.',
+      summary: '"Sans Visa" destination campaign for Street & Fast Food Fest: posters, billboard and mural mockups.',
       contribution: [],
       technologies: ['Graphic Design', 'Campaign', 'Print', 'Mockup'],
       image: 'assets/images/graphic-design/france.png',
@@ -2064,15 +2190,14 @@ html, body{ max-width: 100%; overflow-x: hidden; }
       ],
       video: '',
       liveUrl: '',
-      githubUrl: '',
-      size: 'pc-3'
+      githubUrl: ''
     },
     {
       title: 'Eid Mubarak Poster',
       category: 'Graphic Design · Social Poster',
       type: 'design',
-      hosting: 'case-study',
       description: 'A festive Eid Mubarak greeting poster designed for LEO Club Tunis Méditerranée.',
+      summary: 'Eid greeting poster for LEO Club Tunis Méditerranée.',
       contribution: [],
       technologies: ['Graphic Design', 'Social Media', 'Print'],
       image: 'assets/images/graphic-design/eidmubarak.png',
@@ -2080,15 +2205,14 @@ html, body{ max-width: 100%; overflow-x: hidden; }
       gallery: [],
       video: '',
       liveUrl: '',
-      githubUrl: '',
-      size: 'pc-2'
+      githubUrl: ''
     },
     {
       title: 'Pinnacle Branding',
       category: 'Graphic Design · Branding & Advertising',
       type: 'design',
-      hosting: 'case-study',
       description: 'Logo and promotional poster design for Pinnacle, paired with a short promotional video edit.',
+      summary: 'Logo, promotional poster and a short video ad for Pinnacle.',
       contribution: [],
       technologies: ['Branding', 'Logo Design', 'Advertising'],
       image: 'assets/images/branding/pinnaclelogo.png',
@@ -2096,15 +2220,14 @@ html, body{ max-width: 100%; overflow-x: hidden; }
       gallery: ['assets/images/branding/pinnaclelogo.png', 'assets/images/graphic-design/pinnacleposter.png'],
       video: 'assets/videos/pinnacle_ad.mp4',
       liveUrl: '',
-      githubUrl: '',
-      size: 'pc-4'
+      githubUrl: ''
     },
     {
       title: 'Builders Logo',
       category: 'Graphic Design · Logo Design',
       type: 'design',
-      hosting: 'case-study',
       description: 'A logo design exploration for a brand called Builders.',
+      summary: 'Logo design exploration for Builders.',
       contribution: [],
       technologies: ['Logo Design', 'Branding'],
       image: 'assets/images/branding/builders.png',
@@ -2112,15 +2235,14 @@ html, body{ max-width: 100%; overflow-x: hidden; }
       gallery: [],
       video: '',
       liveUrl: '',
-      githubUrl: '',
-      size: 'pc-2'
+      githubUrl: ''
     },
     {
       title: 'Fan Art Posters',
       category: 'Graphic Design · Fan Art',
       type: 'design',
-      hosting: 'case-study',
       description: 'A series of character and brand fan-art posters made as personal design practice, spanning games, movies and sports.',
+      summary: 'Personal fan-art poster series spanning games, movies and sports.',
       contribution: [],
       technologies: ['Graphic Design', 'Fan Art', 'Layout', 'Typography'],
       image: 'assets/images/graphic-design/fanart-jett.png',
@@ -2135,31 +2257,29 @@ html, body{ max-width: 100%; overflow-x: hidden; }
       ],
       video: '',
       liveUrl: '',
-      githubUrl: '',
-      size: 'pc-2'
+      githubUrl: ''
     },
     {
       title: 'Ramadan Mubarak',
       category: 'Video Editing · Social Content',
       type: 'video',
-      hosting: 'case-study',
       description: 'A short Ramadan Mubarak greeting video edit designed for social media sharing.',
+      summary: 'Short Ramadan Mubarak greeting video for social media.',
       contribution: [],
       technologies: ['Video Editing', 'Motion Graphics', 'Social Media'],
-      image: '',
+      image: 'assets/images/graphic-design/ramadan-mubarak-poster.jpg',
       mockup: 'video',
       gallery: [],
       video: 'assets/images/graphic-design/ramadan-mubarak.mp4',
       liveUrl: '',
-      githubUrl: '',
-      size: 'pc-3'
+      githubUrl: ''
     },
     {
       title: 'Mafia Store',
       category: 'Web Development · E-Commerce Demo',
       type: 'web',
-      hosting: 'static',
       description: 'A demo e-commerce website concept for a sneaker store, "The Syndicate."',
+      summary: 'Demo e-commerce site for a sneaker store, "The Syndicate".',
       contribution: [],
       technologies: ['HTML', 'CSS', 'JavaScript', 'E-Commerce'],
       image: 'assets/images/thumbnails/mafiastore.jpg',
@@ -2167,15 +2287,14 @@ html, body{ max-width: 100%; overflow-x: hidden; }
       gallery: [],
       video: '',
       liveUrl: 'https://dhiaallagui.github.io/mafia-store/',
-      githubUrl: '',
-      size: 'pc-2'
+      githubUrl: ''
     },
     {
       title: 'Verona Collection',
       category: 'Web Development · E-Commerce Demo',
       type: 'web',
-      hosting: 'static',
       description: 'A demo e-commerce website concept for a women\'s fashion and accessories store.',
+      summary: 'Demo e-commerce site for a women\'s fashion and accessories store.',
       contribution: [],
       technologies: ['HTML', 'CSS', 'JavaScript', 'E-Commerce'],
       image: 'assets/images/thumbnails/veronalogo.jpg',
@@ -2183,15 +2302,14 @@ html, body{ max-width: 100%; overflow-x: hidden; }
       gallery: [],
       video: '',
       liveUrl: 'https://dhiaallagui.github.io/veronacollection/',
-      githubUrl: '',
-      size: 'pc-2'
+      githubUrl: ''
     },
     {
       title: 'Ghali Auto',
       category: 'Web Development · Business Demo',
       type: 'web',
-      hosting: 'static',
       description: 'A demo website concept for a premium car dealership based in Le Bardo.',
+      summary: 'Demo website for a premium car dealership in Le Bardo.',
       contribution: [],
       technologies: ['HTML', 'CSS', 'JavaScript'],
       image: 'assets/images/thumbnails/logoghaliauto.png',
@@ -2199,15 +2317,14 @@ html, body{ max-width: 100%; overflow-x: hidden; }
       gallery: [],
       video: '',
       liveUrl: 'https://dhiaallagui.github.io/ghaliauto/',
-      githubUrl: '',
-      size: 'pc-2'
+      githubUrl: ''
     },
     {
       title: 'Catchy 99',
       category: 'Web Development · E-Commerce Demo',
       type: 'web',
-      hosting: 'static',
       description: 'A demo e-commerce website concept for a streetwear sneaker store.',
+      summary: 'Demo e-commerce site for a streetwear sneaker store.',
       contribution: [],
       technologies: ['HTML', 'CSS', 'JavaScript', 'E-Commerce'],
       image: 'assets/images/thumbnails/logocatchy99.png',
@@ -2215,8 +2332,7 @@ html, body{ max-width: 100%; overflow-x: hidden; }
       gallery: [],
       video: '',
       liveUrl: 'https://dhiaallagui.github.io/catchy99/',
-      githubUrl: '',
-      size: 'pc-2'
+      githubUrl: ''
     }
   ];
 
@@ -2244,8 +2360,7 @@ html, body{ max-width: 100%; overflow-x: hidden; }
       + '<p class="doc-label">PDF Document</p></div>'
   };
 
-  var ctaLabels = { static: 'View Live Project ↗', 'case-study': 'View Case Study ↗', 'github-only': 'View on GitHub ↗' };
-  var typeCtaOverrides = { video: 'Watch Project ↗' };
+  var typeLabels = { web: 'Web', design: 'Design', video: 'Video', mobile: 'Mobile' };
 
   function escapeHtml(str){
     var div = document.createElement('div');
@@ -2253,63 +2368,128 @@ html, body{ max-width: 100%; overflow-x: hidden; }
     return div.innerHTML;
   }
 
-  function ctaLabelFor(project){
-    if(project.hosting === 'static' && project.liveUrl){ return ctaLabels.static; }
-    if(project.hosting === 'github-only' && project.githubUrl){ return ctaLabels['github-only']; }
-    if(typeCtaOverrides[project.type]){ return typeCtaOverrides[project.type]; }
-    return ctaLabels['case-study'];
+  function tagsMarkup(list){
+    return list.map(function(t){ return '<span class="tag">' + escapeHtml(t) + '</span>'; }).join('');
   }
 
-  function opensExternally(project){
-    if(project.documents && project.documents.length){ return false; }
-    return (project.hosting === 'static' && project.liveUrl) || (project.hosting === 'github-only' && project.githubUrl);
+  function subCategory(category){
+    var parts = category.split('·');
+    return (parts[1] || parts[0]).trim();
+  }
+
+  function hostOf(url){
+    try { return new URL(url).hostname.replace(/^www\./, ''); } catch(e){ return ''; }
+  }
+
+  function mediaBadge(project){
+    if(project.gallery && project.gallery.length > 1){ return project.gallery.length + ' images'; }
+    if(project.video && project.type !== 'video'){ return 'Video'; }
+    if(project.liveUrl){ return 'Live site'; }
+    if(project.pdf || (project.documents && project.documents.length)){ return 'PDF'; }
+    return '';
+  }
+
+  var PLAY_ICON = '<span class="media-play" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24"><polygon points="7,4 20,12 7,20" fill="currentColor"/></svg></span>';
+
+  // data-ratio is the box's aspect ratio; fitMedia() uses it to choose between filling and fitting.
+  function mediaMarkup(project, ratio, extraClass, overlay){
+    var inner;
+    if(project.image){
+      var src = escapeHtml(project.image);
+      inner = '<img class="media-bg" src="' + src + '" alt="" aria-hidden="true" loading="lazy">'
+        + '<img class="media-img" src="' + src + '" alt="' + escapeHtml(project.title) + '" loading="lazy">';
+    } else if(project.video){
+      inner = '<video class="media-img" src="' + escapeHtml(project.video) + '#t=0.5" muted playsinline preload="metadata" aria-hidden="true"></video>';
+    } else {
+      inner = mockupTemplates[project.mockup] || '';
+    }
+    return '<div class="media' + (extraClass ? ' ' + extraClass : '') + '" data-ratio="' + ratio + '">' + inner + (overlay || '') + '</div>';
+  }
+
+  // Images close to the frame's shape fill it; logos, posters and odd shapes are fitted over a blurred copy instead of being cropped.
+  function fitMedia(root){
+    root.querySelectorAll('.media[data-ratio] img.media-img').forEach(function(img){
+      var box = img.parentNode;
+      var boxRatio = Number(box.getAttribute('data-ratio'));
+      function apply(){
+        if(!img.naturalWidth){ return; }
+        var r = img.naturalWidth / img.naturalHeight;
+        box.classList.toggle('is-cover', r >= boxRatio * 0.85 && r <= boxRatio * 1.3);
+      }
+      if(img.complete){ apply(); } else { img.addEventListener('load', apply); }
+    });
   }
 
   /* =========================================================
-     RENDER PROJECT GRID
+     RENDER WORK SECTION
   ========================================================= */
-  var projectGrid = document.getElementById('projectGrid');
-  var featuredGrid = document.getElementById('featuredGrid');
-  var featuredWorkSection = document.querySelector('.featured-work');
+  var workSection = document.getElementById('work');
+  var featuredList = document.getElementById('featuredList');
+  var workGrid = document.getElementById('workGrid');
+  var workFilters = document.getElementById('workFilters');
+
+  function caseStudyMarkup(project, index, position){
+    var number = String(position + 1).padStart(2, '0');
+    var chrome = project.type === 'web'
+      ? '<div class="cs-chrome" aria-hidden="true"><i></i><i></i><i></i><span>' + escapeHtml(hostOf(project.liveUrl) || project.title) + '</span></div>'
+      : '';
+    var highlights = (project.highlights || []).slice(0, 3);
+    var actions = '<button type="button" class="btn btn-primary" data-open-project="' + index + '">View case study <span class="arrow">↗</span></button>';
+    if(project.liveUrl){
+      actions += '<a class="btn" href="' + escapeHtml(project.liveUrl) + '" target="_blank" rel="noopener noreferrer">Visit live site <span class="arrow">↗</span></a>';
+    }
+
+    return '<article class="cs-row reveal">'
+      + '<button type="button" class="cs-visual" data-open-project="' + index + '" aria-label="Open the ' + escapeHtml(project.title) + ' case study">'
+      + chrome + mediaMarkup(project, 1.6)
+      + '</button>'
+      + '<div class="cs-text">'
+      + '<span class="cs-index">' + number + '</span>'
+      + '<span class="cs-cat">' + escapeHtml(project.category) + '</span>'
+      + '<h3 class="cs-title">' + escapeHtml(project.title) + '</h3>'
+      + '<p class="cs-summary">' + escapeHtml(project.summary || project.description) + '</p>'
+      + (highlights.length ? '<ul class="cs-highlights">' + highlights.map(function(h){ return '<li>' + escapeHtml(h) + '</li>'; }).join('') + '</ul>' : '')
+      + '<div class="cs-tags">' + tagsMarkup(project.technologies) + '</div>'
+      + '<div class="cs-actions">' + actions + '</div>'
+      + '</div></article>';
+  }
 
   function cardMarkup(project, index){
-    var visual = project.image
-      ? '<img src="' + escapeHtml(project.image) + '" alt="' + escapeHtml(project.title) + '" loading="lazy">'
-      : (mockupTemplates[project.mockup] || '');
-
-    return '<article class="project-card ' + project.size + ' reveal" data-cat="' + project.type + '" data-featured="' + (project.featured ? 'true' : 'false') + '" data-index="' + index + '" tabindex="0" role="button" aria-haspopup="dialog">'
-      + '<div class="project-visual">' + visual
-      + '<div class="project-overlay"><span class="project-view-btn">' + ctaLabelFor(project) + '</span></div>'
-      + '</div>'
-      + '<div class="project-info">'
-      + '<span class="project-cat">' + escapeHtml(project.category) + '</span>'
-      + '<h3 class="project-title">' + escapeHtml(project.title) + '</h3>'
-      + '<p class="project-desc">' + escapeHtml(project.description) + '</p>'
-      + '<div class="project-tags">' + project.technologies.map(function(t){ return '<span class="tag">' + escapeHtml(t) + '</span>'; }).join('') + '</div>'
+    var badge = mediaBadge(project);
+    return '<article class="work-card reveal" data-cat="' + project.type + '" data-open-project="' + index + '" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open ' + escapeHtml(project.title) + '">'
+      + '<div class="card-badges"><span class="badge">' + typeLabels[project.type] + '</span>' + (badge ? '<span class="badge">' + badge + '</span>' : '') + '</div>'
+      + mediaMarkup(project, 4 / 3, '', project.type === 'video' && project.video ? PLAY_ICON : '')
+      + '<div class="work-card-body">'
+      + '<span class="work-card-cat">' + escapeHtml(subCategory(project.category)) + '</span>'
+      + '<h4 class="work-card-title">' + escapeHtml(project.title) + '<span class="work-card-go" aria-hidden="true">↗</span></h4>'
+      + '<p class="work-card-summary">' + escapeHtml(project.summary || project.description) + '</p>'
       + '</div></article>';
   }
 
   function renderProjects(){
-    projectGrid.innerHTML = projects.map(cardMarkup).join('');
+    var featured = [];
+    var archive = [];
+    projects.forEach(function(project, index){
+      (project.featured ? featured : archive).push({ project: project, index: index });
+    });
 
-    var featuredProjects = projects.map(function(p, i){ return { project: p, index: i }; })
-      .filter(function(entry){ return entry.project.featured; });
+    featuredList.innerHTML = featured.map(function(e, pos){ return caseStudyMarkup(e.project, e.index, pos); }).join('');
+    workGrid.innerHTML = archive.map(function(e){ return cardMarkup(e.project, e.index); }).join('');
 
-    if(featuredProjects.length && featuredGrid){
-      featuredGrid.innerHTML = featuredProjects.map(function(entry){ return cardMarkup(entry.project, entry.index); }).join('');
-    } else if(featuredWorkSection){
-      featuredWorkSection.style.display = 'none';
-    }
-  }
+    document.getElementById('featuredCount').textContent = featured.length + ' projects';
+    document.getElementById('archiveCount').textContent = archive.length + ' projects';
 
-  function handleCardActivate(card){
-    var project = projects[Number(card.getAttribute('data-index'))];
-    if(!project){ return; }
-    if(opensExternally(project)){
-      window.open(project.hosting === 'static' ? project.liveUrl : project.githubUrl, '_blank', 'noopener,noreferrer');
-    } else {
-      openProjectModal(project, card);
-    }
+    var counts = { all: archive.length };
+    archive.forEach(function(e){ counts[e.project.type] = (counts[e.project.type] || 0) + 1; });
+    workFilters.innerHTML = ['all', 'web', 'design', 'video', 'mobile']
+      .filter(function(key){ return counts[key]; })
+      .map(function(key, i){
+        return '<button class="filter-btn' + (i === 0 ? ' active' : '') + '" data-filter="' + key + '" role="tab" aria-selected="' + (i === 0) + '">'
+          + (key === 'all' ? 'All' : typeLabels[key]) + '<span class="count">' + counts[key] + '</span></button>';
+      }).join('');
+
+    fitMedia(featuredList);
+    fitMedia(workGrid);
   }
 
   /* =========================================================
@@ -2321,63 +2501,75 @@ html, body{ max-width: 100%; overflow-x: hidden; }
   var lastFocusedEl = null;
 
   function buildModalBody(project){
-    var html = '<span class="modal-cat">' + escapeHtml(project.category) + '</span>'
+    var galleryCount = project.gallery ? project.gallery.length : 0;
+    var heroImage = project.image || (galleryCount ? project.gallery[0] : '');
+    var videoIsHero = project.video && (project.type === 'video' || !heroImage);
+    var html = '';
+
+    if(videoIsHero){
+      html += '<div class="media modal-hero"><video controls preload="metadata" src="' + escapeHtml(project.video) + '"'
+        + (project.image ? ' poster="' + escapeHtml(project.image) + '"' : '') + '></video></div>';
+    } else if(heroImage){
+      html += mediaMarkup({ image: heroImage, title: project.title }, 16 / 9, 'modal-hero');
+    } else {
+      html += mediaMarkup(project, 16 / 9, 'modal-hero');
+    }
+
+    html += '<span class="modal-cat">' + escapeHtml(project.category) + '</span>'
       + '<h2 class="modal-title" id="modalTitle">' + escapeHtml(project.title) + '</h2>'
       + '<p class="modal-desc">' + escapeHtml(project.description) + '</p>';
 
-    var galleryCount = project.gallery ? project.gallery.length : 0;
-
-    if(!project.image && !project.video && !galleryCount){
-      html += (mockupTemplates[project.mockup] || '').replace('aria-hidden="true"', 'aria-hidden="true" style="width:100%;height:220px;margin-top:16px;"');
-    }
-    if(project.image && !galleryCount){
-      html += '<img class="modal-thumb" src="' + escapeHtml(project.image) + '" alt="' + escapeHtml(project.title) + '">';
-    }
-    if(project.video){
-      html += '<div class="modal-video"><video controls preload="metadata" src="' + escapeHtml(project.video) + '"></video></div>';
-    }
-    if(galleryCount === 1){
-      html += '<img class="modal-thumb" src="' + escapeHtml(project.gallery[0]) + '" alt="' + escapeHtml(project.title) + '">';
-    } else if(galleryCount > 1){
-      html += '<div class="modal-gallery">' + project.gallery.map(function(src, i){
-        return '<button type="button" data-lightbox-index="' + i + '" aria-label="Open image ' + (i + 1) + ' of ' + galleryCount + '">'
-          + '<img src="' + escapeHtml(src) + '" alt="' + escapeHtml(project.title) + ' screenshot ' + (i + 1) + '" loading="lazy">'
-          + '</button>';
-      }).join('') + '</div>';
-    }
-    if(project.contribution && project.contribution.length){
-      html += '<p class="modal-section-label">My Contribution</p>'
-        + '<ul class="modal-contribution">' + project.contribution.map(function(c){ return '<li>' + escapeHtml(c) + '</li>'; }).join('') + '</ul>';
-    }
-    html += '<p class="modal-section-label">Technologies</p>'
-      + '<div class="modal-tags">' + project.technologies.map(function(t){ return '<span class="tag">' + escapeHtml(t) + '</span>'; }).join('') + '</div>';
-
     var actions = '';
     if(project.liveUrl){
-      actions += '<a class="btn btn-primary" href="' + escapeHtml(project.liveUrl) + '" target="_blank" rel="noopener noreferrer">Live Demo <span class="arrow">↗</span></a>';
+      actions += '<a class="btn btn-primary" href="' + escapeHtml(project.liveUrl) + '" target="_blank" rel="noopener noreferrer">Visit live site <span class="arrow">↗</span></a>';
     }
     if(project.githubUrl){
-      actions += '<a class="btn" href="' + escapeHtml(project.githubUrl) + '" target="_blank" rel="noopener noreferrer">View GitHub <span class="arrow">↗</span></a>';
+      actions += '<a class="btn" href="' + escapeHtml(project.githubUrl) + '" target="_blank" rel="noopener noreferrer">View on GitHub <span class="arrow">↗</span></a>';
     }
     if(project.pdf){
-      actions += '<a class="btn" href="' + escapeHtml(project.pdf) + '" target="_blank" rel="noopener noreferrer">View Full Poster (PDF) <span class="arrow">↗</span></a>';
+      actions += '<a class="btn" href="' + escapeHtml(project.pdf) + '" target="_blank" rel="noopener noreferrer">View full poster (PDF) <span class="arrow">↗</span></a>';
     }
     if(project.documents && project.documents.length){
       actions += project.documents.map(function(doc){
         return '<a class="btn" href="' + escapeHtml(doc.href) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(doc.label) + ' <span class="arrow">↗</span></a>';
       }).join('');
     }
-    if(actions){ html += '<div class="modal-actions">' + actions + '</div>'; }
-
-    if(!project.liveUrl && !project.githubUrl && !project.pdf && !(project.documents && project.documents.length)){
-      html += '<p class="modal-note">This project doesn\'t have public hosting yet. Reach out for a full walkthrough.</p>';
+    if(actions){
+      html += '<div class="modal-actions">' + actions + '</div>';
+    } else if(project.type === 'web' || project.type === 'mobile'){
+      html += '<p class="modal-note">This project isn\'t publicly hosted. Reach out for a full walkthrough.</p>';
     }
+
+    var points = (project.contribution && project.contribution.length) ? project.contribution : (project.highlights || []);
+    if(points.length){
+      html += '<p class="modal-section-label">' + (project.contribution && project.contribution.length ? 'My contribution' : 'Highlights') + '</p>'
+        + '<ul class="modal-contribution">' + points.map(function(c){ return '<li>' + escapeHtml(c) + '</li>'; }).join('') + '</ul>';
+    }
+
+    if(galleryCount > 1){
+      html += '<p class="modal-section-label">Gallery · ' + galleryCount + ' images</p>'
+        + '<div class="modal-gallery">' + project.gallery.map(function(src, i){
+          return '<button type="button" data-lightbox-index="' + i + '" aria-label="Open image ' + (i + 1) + ' of ' + galleryCount + '">'
+            + '<img src="' + escapeHtml(src) + '" alt="' + escapeHtml(project.title) + ' image ' + (i + 1) + '" loading="lazy">'
+            + '</button>';
+        }).join('') + '</div>';
+    }
+
+    if(project.video && !videoIsHero){
+      html += '<p class="modal-section-label">Video</p>'
+        + '<div class="modal-video"><video controls preload="metadata" src="' + escapeHtml(project.video) + '"></video></div>';
+    }
+
+    html += '<p class="modal-section-label">Technologies</p>'
+      + '<div class="modal-tags">' + tagsMarkup(project.technologies) + '</div>';
 
     return html;
   }
 
   function openProjectModal(project, triggerEl){
     modalBody.innerHTML = buildModalBody(project);
+    fitMedia(modalBody);
+    projectModal.querySelector('.modal-panel').scrollTop = 0;
     lastFocusedEl = triggerEl || document.activeElement;
     projectModal.classList.add('active');
     document.body.style.overflow = 'hidden';
@@ -2534,51 +2726,36 @@ html, body{ max-width: 100%; overflow-x: hidden; }
   /* =========================================================
      PROJECT FILTERING
   ========================================================= */
-  var filterBtns = document.querySelectorAll('.filter-btn');
-  var projectCards = projectGrid.querySelectorAll('.project-card');
-
-  filterBtns.forEach(function(btn){
-    btn.addEventListener('click', function(){
-      filterBtns.forEach(function(b){ b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
-      btn.classList.add('active');
-      btn.setAttribute('aria-selected','true');
-
-      var filter = btn.getAttribute('data-filter');
-
-      projectCards.forEach(function(card){
-        var cat = card.getAttribute('data-cat');
-        var show = (filter === 'all')
-          || (filter === 'client' ? card.getAttribute('data-featured') === 'true' : cat === filter);
-
-        if(show){
-          card.classList.remove('hide');
-          card.style.opacity = '0';
-          requestAnimationFrame(function(){
-            card.style.transition = 'opacity 400ms ease, transform 400ms ease';
-            card.style.opacity = '1';
-          });
-        } else {
-          card.style.transition = 'opacity 250ms ease';
-          card.style.opacity = '0';
-          setTimeout(function(){
-            if(card.style.opacity === '0'){ card.classList.add('hide'); }
-          }, 250);
-        }
-      });
+  workFilters.addEventListener('click', function(e){
+    var btn = e.target.closest('.filter-btn');
+    if(!btn){ return; }
+    workFilters.querySelectorAll('.filter-btn').forEach(function(b){
+      var on = b === btn;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-selected', String(on));
+    });
+    var filter = btn.getAttribute('data-filter');
+    workGrid.querySelectorAll('.work-card').forEach(function(card){
+      card.classList.toggle('hide', filter !== 'all' && card.getAttribute('data-cat') !== filter);
     });
   });
 
   /* =========================================================
-     PROJECT CARD ACTIVATION (click / keyboard)
+     OPEN A PROJECT (cards, case-study images and buttons)
   ========================================================= */
-  document.querySelectorAll('.project-card').forEach(function(card){
-    card.addEventListener('click', function(){ handleCardActivate(card); });
-    card.addEventListener('keydown', function(e){
-      if(e.key === 'Enter' || e.key === ' '){
-        e.preventDefault();
-        handleCardActivate(card);
-      }
-    });
+  function openFromTrigger(el){
+    openProjectModal(projects[Number(el.getAttribute('data-open-project'))], el);
+  }
+
+  workSection.addEventListener('click', function(e){
+    var trigger = e.target.closest('[data-open-project]');
+    if(trigger){ openFromTrigger(trigger); }
+  });
+  workSection.addEventListener('keydown', function(e){
+    if((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('work-card')){
+      e.preventDefault();
+      openFromTrigger(e.target);
+    }
   });
 
   /* =========================================================
@@ -2616,7 +2793,7 @@ html, body{ max-width: 100%; overflow-x: hidden; }
     }
     animateRing();
 
-    var hoverTargets = 'a, button, .project-card, .service-row, .filter-btn, .tool-tag';
+    var hoverTargets = 'a, button, .work-card, .service-row, .filter-btn, .tool-tag';
     document.addEventListener('mouseover', function(e){
       if(e.target.closest(hoverTargets)){ ring.classList.add('hovered'); }
     });
